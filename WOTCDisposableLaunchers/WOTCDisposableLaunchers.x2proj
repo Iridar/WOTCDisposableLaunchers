@@ -1,0 +1,116 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Default" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Guid>986e0e3d-afb7-4f66-b34c-363e9d3f5a38</Guid>
+    <Name>WOTCDisposableLaunchers</Name>
+    <Description>Adds a Disposable Rocket Launcher for conventional, magnetic and beam tiers.
+
+tags= war of the chosen, item, weapon</Description>
+    <SteamPublishID>0</SteamPublishID>
+    <AssemblyName>WOTCDisposableLaunchers</AssemblyName>
+    <RootNamespace>WOTCDisposableLaunchers</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="Config\Base\XComCamera.ini">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Config\Base\XComContent.ini">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Config\Base\XComEditor.ini">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Config\Base\XComEngine.ini">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Config\Base\XComGame.ini">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Config\Base\XComGameData.ini">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Config\XComClassData.ini">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Config\XComDisposableLaunchers.ini">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Config\XComWOTCOpenWeaponRestrictions.ini">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Content\AT4_Assets.upk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Content\Disposable_BM.upk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Content\Disposable_Common.upk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Content\Disposable_MG.upk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Localization\WOTCDisposableLaunchers.int">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Localization\XComGame.int">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="ModPreview.jpg">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="ReadMe.txt" />
+    <Content Include="Src\WOTCDisposableLaunchers\Classes\UIScrollingTextField.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\WOTCDisposableLaunchers\Classes\UIUtilities_DRL.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\WOTCDisposableLaunchers\Classes\X2Ability_DisposableLaunchers.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\WOTCDisposableLaunchers\Classes\X2Action_FireDisposableLauncher.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\WOTCDisposableLaunchers\Classes\X2Condition_HeavyArmor.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\WOTCDisposableLaunchers\Classes\X2DisposableLauncherTemplate.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\WOTCDisposableLaunchers\Classes\X2DownloadableContentInfo_WOTCDisposableLaunchers.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\WOTCDisposableLaunchers\Classes\X2Effect_DisposableMobilityPenalty.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\WOTCDisposableLaunchers\Classes\X2Effect_IRI_StackAmmo.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\WOTCDisposableLaunchers\Classes\X2EventListener_UnequipDRL.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\WOTCDisposableLaunchers\Classes\X2Item_DisposableLaunchers.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\WOTCDisposableLaunchers\Classes\X2StrategyElement_DisposableLauncherSlot.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\WOTCDisposableLaunchers\Classes\X2TargetingMethod_DisposableLauncher.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\WOTCDisposableLaunchers\Classes\X2Utility_DRL_Template.uc">
+      <SubType>Content</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Config" />
+    <Folder Include="Config\Base" />
+    <Folder Include="Content" />
+    <Folder Include="Localization" />
+    <Folder Include="Src" />
+    <Folder Include="Src\WOTCDisposableLaunchers" />
+    <Folder Include="Src\WOTCDisposableLaunchers\Classes" />
+  </ItemGroup>
+  <Import Project="$(MSBuildLocalExtensionPath)\XCOM2.targets" />
+</Project>
