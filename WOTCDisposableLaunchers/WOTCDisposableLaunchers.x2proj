@@ -99,7 +99,7 @@ tags= war of the chosen, item, weapon</Description>
     <Content Include="Src\WOTCDisposableLaunchers\Classes\X2TargetingMethod_DisposableLauncher.uc">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Src\WOTCDisposableLaunchers\Classes\X2Utility_DRL_Template.uc">
+    <Content Include="Src\WOTCDisposableLaunchers\Classes\X2UtilityDisposableLauncherTemplate.uc">
       <SubType>Content</SubType>
     </Content>
   </ItemGroup>

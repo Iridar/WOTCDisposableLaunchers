@@ -1,4 +1,4 @@
-class X2Utility_DRL_Template extends X2PairedWeaponTemplate;
+class X2UtilityDisposableLauncherTemplate extends X2PairedWeaponTemplate;
 
 function PairEquipped(XComGameState_Item ItemState, XComGameState_Unit UnitState, XComGameState NewGameState)
 {
