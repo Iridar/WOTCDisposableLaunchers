@@ -179,8 +179,12 @@ static function X2DataTemplate Create_IRI_RPG_CV()
 	return Template;
 }
 
-static function Setup_DisposableLauncher_Utility_CV(out X2PairedWeaponTemplate Template)
+static function X2PairedWeaponTemplate Setup_DisposableLauncher_Utility_CV(X2DataTemplate InTemplate)
 {
+	local X2PairedWeaponTemplate Template;
+
+	Template = X2PairedWeaponTemplate(InTemplate);
+
 	Setup_DisposableLauncher_Utility(Template);
 
 	Template.Tier = -3;
@@ -216,6 +220,7 @@ static function Setup_DisposableLauncher_Utility_CV(out X2PairedWeaponTemplate T
 	{
 		Template.CreatorTemplateName = default.RPG_CV_CREATOR_TEMPLATE;
 	}
+	return Template;
 }
 
 static function X2UtilityDisposableLauncherTemplate Create_IRI_RPG_CV_Utility(optional name TemplateName = 'IRI_RPG_CV_Utility')
@@ -224,7 +229,7 @@ static function X2UtilityDisposableLauncherTemplate Create_IRI_RPG_CV_Utility(op
 
 	`CREATE_X2TEMPLATE(class'X2UtilityDisposableLauncherTemplate', Template, TemplateName);
 
-	Setup_DisposableLauncher_Utility_CV(Template);
+	Template = X2UtilityDisposableLauncherTemplate(Setup_DisposableLauncher_Utility_CV(Template));
 
 	return Template;
 }
@@ -235,7 +240,7 @@ static function X2DataTemplate Create_IRI_RPG_CV_Secondary()
 
 	`CREATE_X2TEMPLATE(class'X2PairedWeaponTemplate', Template, 'IRI_RPG_CV_Secondary');
 
-	Setup_DisposableLauncher_Utility_CV(Template);
+	Template = Setup_DisposableLauncher_Utility_CV(Template);
 
 	Template.StowedLocation = eSlot_RightBack;
 	Template.InventorySlot = eInvSlot_SecondaryWeapon;
@@ -257,7 +262,7 @@ static function X2DataTemplate Create_IRI_RPG_CV_Heavy()
 
 	`CREATE_X2TEMPLATE(class'X2PairedWeaponTemplate', Template, 'IRI_RPG_CV_Heavy');
 
-	Setup_DisposableLauncher_Utility_CV(Template);
+	Template = Setup_DisposableLauncher_Utility_CV(Template);
 
 	Template.StowedLocation = eSlot_HeavyWeapon;
 	Template.InventorySlot = eInvSlot_HeavyWeapon;
@@ -304,8 +309,12 @@ static function X2DataTemplate Create_IRI_RPG_MG()
 	return Template;
 }
 
-static function Setup_DisposableLauncher_Utility_MG(out X2PairedWeaponTemplate Template)
+static function X2PairedWeaponTemplate Setup_DisposableLauncher_Utility_MG(X2DataTemplate InTemplate)
 {
+	local X2PairedWeaponTemplate Template;
+
+	Template = X2PairedWeaponTemplate(InTemplate);
+
 	Setup_DisposableLauncher_Utility(Template);
 
 	Template.Tier = -2;
@@ -336,6 +345,8 @@ static function Setup_DisposableLauncher_Utility_MG(out X2PairedWeaponTemplate T
 	Template.CreatorTemplateName = default.RPG_MG_CREATOR_TEMPLATE;
 
 	Template.BaseItem = 'IRI_RPG_CV_Utility';
+
+	return Template;
 }
 
 static function X2UtilityDisposableLauncherTemplate Create_IRI_RPG_MG_Utility(optional name TemplateName = 'IRI_RPG_MG_Utility')
@@ -344,7 +355,7 @@ static function X2UtilityDisposableLauncherTemplate Create_IRI_RPG_MG_Utility(op
 
 	`CREATE_X2TEMPLATE(class'X2UtilityDisposableLauncherTemplate', Template, TemplateName);
 
-	Setup_DisposableLauncher_Utility_MG(Template);
+	Template = X2UtilityDisposableLauncherTemplate(Setup_DisposableLauncher_Utility_MG(Template));
 
 	return Template;
 }
@@ -355,7 +366,7 @@ static function X2DataTemplate Create_IRI_RPG_MG_Secondary()
 
 	`CREATE_X2TEMPLATE(class'X2PairedWeaponTemplate', Template, 'IRI_RPG_MG_Secondary');
 
-	Setup_DisposableLauncher_Utility_MG(Template);
+	Template = Setup_DisposableLauncher_Utility_MG(Template);
 
 	Template.BaseItem = 'IRI_RPG_CV_Secondary';
 
@@ -375,7 +386,7 @@ static function X2DataTemplate Create_IRI_RPG_MG_Heavy()
 
 	`CREATE_X2TEMPLATE(class'X2PairedWeaponTemplate', Template, 'IRI_RPG_MG_Heavy');
 
-	Setup_DisposableLauncher_Utility_MG(Template);
+	Template = Setup_DisposableLauncher_Utility_MG(Template);
 
 	Template.StowedLocation = eSlot_HeavyWeapon;
 	Template.InventorySlot = eInvSlot_HeavyWeapon;
@@ -393,8 +404,12 @@ static function X2DataTemplate Create_IRI_RPG_MG_Heavy()
 //	*********************************************
 //	*********************************************
 
-static function Setup_DisposableLauncher_Utility_BM(out X2PairedWeaponTemplate Template)
+static function X2PairedWeaponTemplate Setup_DisposableLauncher_Utility_BM(X2DataTemplate InTemplate)
 {
+	local X2PairedWeaponTemplate Template;
+
+	Template = X2PairedWeaponTemplate(InTemplate);
+
 	Setup_DisposableLauncher_Utility(Template);
 
 	Template.Tier = -1;
@@ -421,6 +436,8 @@ static function Setup_DisposableLauncher_Utility_BM(out X2PairedWeaponTemplate T
 	Template.CreatorTemplateName = default.RPG_BM_CREATOR_TEMPLATE;
 
 	Template.BaseItem = 'IRI_RPG_MG_Utility';
+
+	return Template;
 }
 
 static function X2DataTemplate Create_IRI_RPG_BM()
@@ -457,7 +474,7 @@ static function X2UtilityDisposableLauncherTemplate Create_IRI_RPG_BM_Utility(op
 
 	`CREATE_X2TEMPLATE(class'X2UtilityDisposableLauncherTemplate', Template, TemplateName);
 
-	Setup_DisposableLauncher_Utility_BM(Template);
+	Template = X2UtilityDisposableLauncherTemplate(Setup_DisposableLauncher_Utility_BM(Template));
 
 	return Template;
 }
@@ -468,7 +485,7 @@ static function X2DataTemplate Create_IRI_RPG_BM_Secondary()
 
 	`CREATE_X2TEMPLATE(class'X2PairedWeaponTemplate', Template, 'IRI_RPG_BM_Secondary');
 
-	Setup_DisposableLauncher_Utility_BM(Template);
+	Template = Setup_DisposableLauncher_Utility_BM(Template);
 
 	Template.BaseItem = 'IRI_RPG_MG_Secondary';
 
@@ -488,7 +505,7 @@ static function X2DataTemplate Create_IRI_RPG_BM_Heavy()
 
 	`CREATE_X2TEMPLATE(class'X2PairedWeaponTemplate', Template, 'IRI_RPG_BM_Heavy');
 
-	Setup_DisposableLauncher_Utility_BM(Template);
+	Template = Setup_DisposableLauncher_Utility_BM(Template);
 
 	Template.StowedLocation = eSlot_HeavyWeapon;
 	Template.InventorySlot = eInvSlot_HeavyWeapon;
