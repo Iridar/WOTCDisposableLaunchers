@@ -1,5 +1,6 @@
 class X2DownloadableContentInfo_WOTCDisposableLaunchers extends X2DownloadableContentInfo config(DisposableLaunchers);
 
+var localized string DRL_WeaponCategory;
 var localized string DRL_Category;
 var localized string DRL_Not_Allowed_With_Grenades_Message;
 var localized string DRL_Requires_Two_Slots;

@@ -5,6 +5,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	local array<X2DataTemplate> Templates;
 
 	Templates.AddItem(CreateListener());
+	Templates.AddItem(CreateOnGetLocalizedCategoryListenerTemplate());
 
 	return Templates;
 }
@@ -22,6 +23,19 @@ static function CHEventListenerTemplate CreateListener()
 	Template.RegisterInStrategy = true;
 
 	return Template; 
+}
+
+static function CHEventListenerTemplate CreateOnGetLocalizedCategoryListenerTemplate()
+{
+	local CHEventListenerTemplate Template;
+
+	`CREATE_X2TEMPLATE(class'CHEventListenerTemplate', Template, 'IRI_DRLGetLocalizedCategory');
+
+	Template.RegisterInTactical = true;
+	Template.RegisterInStrategy = true;
+
+	Template.AddCHEvent('GetLocalizedCategory', OnGetLocalizedCategory, ELD_Immediate);
+	return Template;
 }
 
 static protected function EventListenerReturn ShowUnequipButton(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData)
@@ -47,6 +61,22 @@ static protected function EventListenerReturn ShowUnequipButton(Object EventData
 			//	clicking the cross icon will unequip the slot, and if necessary, the game will try to put something else in that slot (i.e. unit's default secondary weapon or a grenade for the utiltiy slot)
 			Tuple.Data[0].i = eCHSUB_AttemptReEquip;
 		}
+	}
+	return ELR_NoInterrupt;
+}
+
+static function EventListenerReturn OnGetLocalizedCategory(Object EventData, Object EventSource, XComGameState GameState, Name Event, Object CallbackData)
+{
+    local XComLWTuple Tuple;
+    local X2WeaponTemplate Template;
+
+    Tuple = XComLWTuple(EventData);
+    Template = X2WeaponTemplate(EventSource);
+
+	if (Template.WeaponCat == 'iri_disposable_launcher')
+	{
+		Tuple.Data[0].s = class'X2DownloadableContentInfo_WOTCDisposableLaunchers'.default.DRL_WeaponCategory;
+		EventData = Tuple;
 	}
 	return ELR_NoInterrupt;
 }

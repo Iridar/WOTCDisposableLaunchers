@@ -5,6 +5,7 @@ m_sAverageScatterText="± <XGParam:StrValue0/> Tiles"
 strMaxScatter="\nMax Scatter (Tiles): "
 
 [X2DownloadableContentInfo_WOTCDisposableLaunchers]
+DRL_WeaponCategory = "Disposable Launcher"
 DRL_Category="DISPOSABLE LAUNCHER"
 DRL_Not_Allowed_With_Grenades_Message="UTILITY SLOT DISPOSABLE LAUNCHER MUTUALLY EXCLUSIVE WITH GRENADES"
 DRL_Requires_Two_Slots="DISPOSABLE LAUNCHER REQUIRES TWO UTILITY SLOTS"
