@@ -76,3 +76,67 @@ RPG_Secondary_WeaponCat = "iri_disposable_launcher"
 
 RPG_Heavy_ItemCat = "weapon"
 RPG_Heavy_WeaponCat = "iri_disposable_launcher"
+
+
+--------------
+
+
+[h1]FEATURES[/h1]
+
+This mod adds three tiers of single-shot Disposable Rocket Launchers (DRLs). They offer a heavier alternative to [b]Frag Grenades[/b] - they deal more damage and can be used at longer ranges, but they can miss the targeted area and [b]scatter[/b]. 
+
+Rocket scatter scales with soldier's Aim, and it gets worse if you fire the DRL with only one action remaining.
+
+[h1]REQUIREMENTS[/h1]
+
+[url=https://steamcommunity.com/workshop/filedetails/?id=1134256495][b]X2 WOTC Community Highlander[/b][/url] is required.
+
+Safe to add mid-campaign, but I don't recommend doing it during a tactical mission just in case.
+
+[h1]HOW TO ACQUIRE[/h1]
+
+Conventional launchers are available from the start in infinite quantities. They are then upgraded in [b]Proving Grounds[/b]: [b]Alien Grenade[/b] project will unlock magnetic tier, and [b]Advanced Explosives[/b] project will unlock beam tier.
+
+[h1]HOW TO USE[/h1]
+
+[b]Utility Slot[/b] - any soldier class can carry a Disposable Launcher in a Utility Slot, however that comes with certain penalties and restrictions:[list]
+[*] -1 Mobility
+[*] +20% Detection Radius
+[*] Cannot carry offensive grenades in other Utility Slots. 
+[*] Penalties are removed once the Launcher is fired and disposed of.
+[*] Disposable Launchers cannot be carried in Grenade-only slots.[/list]
+[b]Heavy Weapon Slot[/b] - any soldier can carry a Disposable Launcher in Heavy Weapon slot without any penalties or restrictions.
+
+[b]Secondary Weapon Slot[/b] - Grenadiers can carry a Disposable Launcher as a Secondary Weapon. If you have [b][url=https://steamcommunity.com/sharedfiles/filedetails/?id=1533060800]Open Class Weapon Restrictions[/url][/b] mod, all classes that can use a Grenade Launcher as a secondary weapon will be able to carry a Disposable Launcher in that slot as well.
+
+You're allowed to carry only one Disposable Rocket Launcher per soldier.
+
+[h1]KNOWN ISSUES[/h1]
+
+Sometimes some soldiers become unable to equip a DRL, showing the error message that the soldier already has a DRL equipped. If that happens, use this console command:
+[code]UnequipDisposableLaunchers[/code]
+For best results, use this command twice in a row. It will unequip DRLs from all soldiers in your campaign. Probably shouldn't use this command while you have someone with a DRL on a Covert Action.
+
+[h1]CONFIGURATION[/h1]
+
+The mod is [i][b]highly[/b][/i] configurable through:
+
+[code]..\steamapps\workshop\content\268500\1626184587\Config\XComDisposableLaunchers.ini[/code]
+
+[h1]COMPATIBILITY[/h1]
+
+Should be compatible with almost anything.
+
+[h1]CREDITS[/h1]
+
+The Magnetic and Beam launchers are ported from PlanetSide 2. They are owned by Daybreak Games Company, and will be removed at their request.
+
+Thanks to E3245 for his koalified help with PS2 textures and the authentic AT4 model.
+
+Thanks to Beaglerush for his consultations on the mod balance and demo-ing the mod during his XCOM 2 streams, which you can [b][url=https://www.twitch.tv/beagsandjam]watch here[/url][/b].
+
+Thanks to Pavonis Interactive for their rocket scatter code, and to Favid for bringing it over from LW2 to WOTC.
+
+This mod was made possible by my wonderful supporters on Patreon. The theme of the mod was chosen by them with a vote, and their feedback helped shape the mod.
+
+Please consider [b][url=https://www.patreon.com/Iridar]supporting me on patreon[/url][/b] so I can afford the time to make more awesome mods.

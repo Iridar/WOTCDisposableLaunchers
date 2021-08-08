@@ -50,7 +50,19 @@ tags= war of the chosen, item, weapon</Description>
     <Content Include="Content\Disposable_MG.upk">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Localization\WOTCDisposableLaunchers.chn">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Localization\WOTCDisposableLaunchers.cht">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Localization\WOTCDisposableLaunchers.int">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Localization\XComGame.chn">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Localization\XComGame.cht">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Localization\XComGame.int">
