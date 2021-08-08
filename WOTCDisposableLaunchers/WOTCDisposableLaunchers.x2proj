@@ -9,6 +9,7 @@ tags= war of the chosen, item, weapon</Description>
     <SteamPublishID>0</SteamPublishID>
     <AssemblyName>WOTCDisposableLaunchers</AssemblyName>
     <RootNamespace>WOTCDisposableLaunchers</RootNamespace>
+    <ProjectGuid>{df91bda4-4e62-45c0-ab9e-ee573394b6fd}</ProjectGuid>
   </PropertyGroup>
   <ItemGroup>
     <Content Include="Config\Base\XComCamera.ini">
@@ -124,5 +125,10 @@ tags= war of the chosen, item, weapon</Description>
     <Folder Include="Src\WOTCDisposableLaunchers" />
     <Folder Include="Src\WOTCDisposableLaunchers\Classes" />
   </ItemGroup>
-  <Import Project="$(MSBuildLocalExtensionPath)\XCOM2.targets" />
+  <PropertyGroup>
+    <SolutionRoot>$(MSBuildProjectDirectory)\..\</SolutionRoot>
+    <ScriptsDir>$(SolutionRoot).scripts\</ScriptsDir>
+    <BuildCommonRoot>$(ScriptsDir)X2ModBuildCommon\</BuildCommonRoot>
+  </PropertyGroup>
+  <Import Project="$(BuildCommonRoot)XCOM2.targets" />
 </Project>
