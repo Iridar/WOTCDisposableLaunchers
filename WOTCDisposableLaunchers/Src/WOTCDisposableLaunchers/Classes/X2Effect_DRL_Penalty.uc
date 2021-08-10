@@ -1,5 +1,7 @@
 class X2Effect_DRL_Penalty extends X2Effect_ModifyStats config(DisposableLaunchers);
 
+// Unnecessarily fancy effect that applies stat penalties for DRLs while they have ammo remaining.
+
 struct PenaltyStruct
 {
 	var name Template;
@@ -100,6 +102,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	local PenaltyStateStruct			PenaltyState;
 
 	UnitState = XComGameState_Unit(kNewTargetState);
+	//`LOG(GetFuncName() @ UnitState.GetFullName(),, 'IRITEST');
 	if (UnitState != none)
 	{
 		// Zero out the array so that newly calculated stat changes don't stack with stat changes calculated on the previous turn.
@@ -119,20 +122,23 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 				PenaltyState.ItemState = ItemState;
 				PenaltyState.Penalties.Length = 0;
 
-				`LOG("DRL:" @ ItemState.InventorySlot,, 'IRITEST');
+				// Calculate total ammount of remaining rockets.
+				CurrentAmmo += ItemState.Ammo;
+
+				//`LOG("DRL:" @ ItemState.InventorySlot,, 'IRITEST');
 
 				// For each DRL Item State, store an array of penalties that should be applied for carriyng it.
 				foreach default.Penalties(Penalty)
 				{
 					if ((Penalty.Slot == ItemState.InventorySlot || Penalty.Slot == eInvSlot_Unknown) && (Penalty.Template == ItemState.GetMyTemplateName() || Penalty.Template == ''))
 					{
-						foreach Penalty.StatChanges(NewStatChange)
-						{	
-							if (NewStatChange.StatAmount != 0)
-							{
-								`LOG("-- Applied penalty:" @ NewStatChange.StatType @ NewStatChange.StatAmount,, 'IRITEST');
-							}
-						}
+						//foreach Penalty.StatChanges(NewStatChange)
+						//{	
+						//	if (NewStatChange.StatAmount != 0)
+						//	{
+						//		`LOG("-- Has penalty:" @ NewStatChange.StatType @ NewStatChange.StatAmount,, 'IRITEST');
+						//	}
+						//}
 
 						PenaltyState.Penalties.AddItem(Penalty);
 					}
@@ -141,10 +147,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 				// Filter out any DRLs that don't apply any penalties.
 				if (PenaltyState.Penalties.Length > 0)
 				{
-					// Calculate total ammount of remaining rockets.
-					CurrentAmmo += ItemState.Ammo;
-
-					`LOG("This DRL has penalties, adding to array, increasing Current Ammo by:" @ ItemState.Ammo,, 'IRITEST');
+					//`LOG("This DRL has penalties, adding to array, increasing Current Ammo by:" @ ItemState.Ammo,, 'IRITEST');
 
 					PenaltyStates.AddItem(PenaltyState);
 				}
@@ -152,7 +155,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 		}
 
 		PenaltyStates.Sort(SortPenaltyStates);
-		`LOG("First cycle done:" @ `showvar(CurrentAmmo) @ "have DRL-penalty pairs:" @ PenaltyStates.Length,, 'IRITEST');
+		//`LOG("First cycle done:" @ `showvar(CurrentAmmo) @ "have DRL-penalty pairs:" @ PenaltyStates.Length,, 'IRITEST');
 
 		// Cycle through the DRL-penalty array we have built.
 		foreach PenaltyStates(PenaltyState)
@@ -160,12 +163,12 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 			// This cycle breaker serves the purpose of not applying penalties for those DRLs that have exhausted their ammo.
 			if (CurrentAmmo <= 0)
 			{	
-				`LOG("### END OF THE LINE ###",, 'IRITEST');
+				//`LOG("### END OF THE LINE ###",, 'IRITEST');
 				break;
 			}
 			// This should work regardless if DRL was merged out or exhausted their ammo naturally.
 			CurrentAmmo -= PenaltyState.ItemState.GetClipSize();
-			`LOG("Still in the cycle:" @ `showvar(CurrentAmmo) @ "applying penalties for DRL in slot:" @ PenaltyState.ItemState.InventorySlot,, 'IRITEST');
+			//`LOG("Still in the cycle:" @ `showvar(CurrentAmmo) @ "applying penalties for DRL in slot:" @ PenaltyState.ItemState.InventorySlot,, 'IRITEST');
 
 			// Add the penalties into the Effect's array
 			foreach PenaltyState.Penalties(Penalty)
@@ -174,11 +177,14 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 				{	
 					if (NewStatChange.StatAmount != 0)
 					{
+						//`LOG("-- Applied penalty:" @ NewStatChange.StatType @ NewStatChange.StatAmount,, 'IRITEST');
 						NewEffectState.StatChanges.AddItem(NewStatChange);
 					}
 				}
 			}
 		}
+
+		//`LOG("### END OF THE LINE ###",, 'IRITEST');
 	}
 
 	// And apply them.

@@ -5,18 +5,38 @@ class X2Condition_HeavyArmor extends X2Condition;
 
 event name CallMeetsCondition(XComGameState_BaseObject kTarget)
 {
-	local XComGameState_Item ItemState;
+	
 	local XComGameState_Unit UnitState;
-	local X2ArmorTemplate ArmorTemplate;
-
+	
 	UnitState = XComGameState_Unit(kTarget);
-	if (UnitState == none)	return 'AA_NotAUnit';
+	if (UnitState == none)	
+		return 'AA_NotAUnit';
 
-	ItemState = UnitState.GetItemInSlot(eInvSlot_Armor);
-
-	if (ItemState != none) ArmorTemplate = X2ArmorTemplate(ItemState.GetMyTemplate());
-
-	if (ArmorTemplate != none && (ArmorTemplate.ArmorClass == 'heavy' || ArmorTemplate.bHeavyWeapon)) return 'AA_AbilityUnavailable';
+	if (DoesUnitHaveHeavyArmor(UnitState))
+	{
+		return 'AA_AbilityUnavailable';
+	}
 
 	return 'AA_Success';
+}
+
+function bool CanEverBeValid(XComGameState_Unit SourceUnit, bool bStrategyCheck)
+{
+	return DoesUnitHaveHeavyArmor(SourceUnit);
+}
+
+static private function bool DoesUnitHaveHeavyArmor(const XComGameState_Unit UnitState)
+{
+	local XComGameState_Item ItemState;
+	local X2ArmorTemplate ArmorTemplate;
+
+	ItemState = UnitState.GetItemInSlot(eInvSlot_Armor);
+	if (ItemState == none)
+		return false;
+	
+	ArmorTemplate = X2ArmorTemplate(ItemState.GetMyTemplate());
+	if (ArmorTemplate == none)
+		return false;
+		
+	return ArmorTemplate.ArmorClass == 'heavy' || ArmorTemplate.bHeavyWeapon;
 }
