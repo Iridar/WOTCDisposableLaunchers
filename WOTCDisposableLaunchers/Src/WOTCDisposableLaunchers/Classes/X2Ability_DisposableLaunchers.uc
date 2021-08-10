@@ -1,4 +1,8 @@
-class X2Ability_DisposableLaunchers extends X2Ability;
+class X2Ability_DisposableLaunchers extends X2Ability config (DisposableLaunchers);
+
+var config int RPG_ACTION_POINT_COST;
+var config bool RPG_ACTION_POINT_ENDS_TURN;
+var config array<name> RPG_NON_TURN_ENDING_ABILITIES;
 
 static function array<X2DataTemplate> CreateTemplates()
 {
@@ -53,9 +57,9 @@ static function X2AbilityTemplate IRI_FireRPG()
 
 	// Costs
 	ActionPointCost = new class'X2AbilityCost_ActionPoints';
-	ActionPointCost.iNumPoints = class'X2Item_DisposableLaunchers'.default.RPG_ACTION_POINT_COST;
-	ActionPointCost.bConsumeAllPoints = class'X2Item_DisposableLaunchers'.default.RPG_ACTION_POINT_ENDS_TURN;
-	ActionPointCost.DoNotConsumeAllSoldierAbilities = class'X2Item_DisposableLaunchers'.default.RPG_NON_TURN_ENDING_ABILITIES;
+	ActionPointCost.iNumPoints = default.RPG_ACTION_POINT_COST;
+	ActionPointCost.bConsumeAllPoints = default.RPG_ACTION_POINT_ENDS_TURN;
+	ActionPointCost.DoNotConsumeAllSoldierAbilities = default.RPG_NON_TURN_ENDING_ABILITIES;
 	Template.AbilityCosts.AddItem(ActionPointCost);
 
 	AmmoCost = new class'X2AbilityCost_Ammo';	
@@ -88,9 +92,9 @@ static function X2AbilityTemplate IRI_FireRPG()
 
 static function X2AbilityTemplate IRI_PenaltyRPG()
 {
-	local X2AbilityTemplate						Template;	
-	local X2Effect_DRL_Penalty	MobilityDamageEffect;
-	local X2AbilityTrigger_EventListener		Trigger;
+	local X2AbilityTemplate					Template;	
+	local X2Effect_DRL_Penalty				MobilityDamageEffect;
+	local X2AbilityTrigger_EventListener	Trigger;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'IRI_PenaltyRPG');
 
@@ -101,7 +105,7 @@ static function X2AbilityTemplate IRI_PenaltyRPG()
 
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
 
-	if (!class'X2Item_DisposableLaunchers'.default.MOBILITY_PENALTY_IS_APPLIED_TO_HEAVY_ARMOR)
+	if (!class'X2Effect_DRL_Penalty'.default.MOBILITY_PENALTY_IS_APPLIED_TO_HEAVY_ARMOR)
 	{
 		//	don't apply penalty to heavy armor
 		Template.AbilityShooterConditions.AddItem(new class'X2Condition_HeavyArmor');

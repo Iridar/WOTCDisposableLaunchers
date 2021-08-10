@@ -1,12 +1,12 @@
-[IRI_DisposableMobilityPenalty X2AbilityTemplate]
+[IRI_PenaltyRPG X2AbilityTemplate]
 LocFriendlyName="Munitions"
 LocLongDescription="Carrying heavy ordnance in Utility Slot is slowing down this soldier, and makes them easier to detect in concealment. Disposing of the heavy ordnance will remove the penalty."
 LocHelpText="Carrying heavy ordnance in Utility Slot is slowing down this soldier, and makes them easier to detect in concealment. Disposing of the heavy ordnance will remove the penalty."
 
 [IRI_FireRPG X2AbilityTemplate]
-LocFriendlyName="Fire RPG"
-LocLongDescription="Fire the Disposable Rocket Launcher. The shot can scatter."
-LocHelpText="The shot can scatter"
+LocFriendlyName="Fire Disposable Launcher"
+LocLongDescription="Fire the Disposable Rocket Launcher."
+LocHelpText="Fire the Disposable Rocket Launcher."
 LocFlyOverText="Firing Rocket"
 
 [X2Photobooth]

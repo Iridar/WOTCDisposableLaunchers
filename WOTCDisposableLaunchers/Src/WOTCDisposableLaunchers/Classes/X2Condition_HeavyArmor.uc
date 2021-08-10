@@ -1,7 +1,7 @@
 class X2Condition_HeavyArmor extends X2Condition;
 
 // checking if target unit has heavy armor equipped
-//	condition succeeds if the unit DOES NOT have it.
+// condition succeeds if the unit DOES NOT have it.
 
 event name CallMeetsCondition(XComGameState_BaseObject kTarget)
 {

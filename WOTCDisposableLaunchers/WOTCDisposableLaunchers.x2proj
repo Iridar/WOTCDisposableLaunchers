@@ -30,7 +30,13 @@ tags= war of the chosen, item, weapon</Description>
     <Content Include="Config\Base\XComGameData.ini">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Config\Base\XComTemplateCreator.ini">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Config\Compatibility\XComScatter.ini">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Config\Compatibility\XComWOTCOpenWeaponRestrictions.ini">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Config\XComClassData.ini">
@@ -39,13 +45,7 @@ tags= war of the chosen, item, weapon</Description>
     <Content Include="Config\XComDisposableLaunchers.ini">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Config\XComTemplateCreator.ini">
-      <SubType>Content</SubType>
-    </Content>
     <Content Include="Config\XComTemplateEditor.ini">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Config\XComWOTCOpenWeaponRestrictions.ini">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Content\AT4_Assets.upk">
@@ -101,15 +101,6 @@ tags= war of the chosen, item, weapon</Description>
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\WOTCDisposableLaunchers\Classes\X2EventListener_DRL.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\WOTCDisposableLaunchers\Classes\X2Item_DisposableLaunchers.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\WOTCDisposableLaunchers\Classes\X2StrategyElement_DisposableLauncherSlot.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\WOTCDisposableLaunchers\Classes\XComGameState_Item_DRL.uc">
       <SubType>Content</SubType>
     </Content>
   </ItemGroup>

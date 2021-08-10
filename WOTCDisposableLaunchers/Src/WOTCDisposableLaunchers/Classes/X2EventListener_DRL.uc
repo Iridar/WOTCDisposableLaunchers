@@ -10,7 +10,6 @@ static function array<X2DataTemplate> CreateTemplates()
 	return Templates;
 }
 
-
 static final function CHEventListenerTemplate CreateStrategyListener()
 {
 	local CHEventListenerTemplate Template;
@@ -21,56 +20,9 @@ static final function CHEventListenerTemplate CreateStrategyListener()
 
 	//	triggered by Highlander event
 	//	https://github.com/X2CommunityCore/X2WOTCCommunityHighlander/blob/1a31c1620d9ace07fc46cc716510c7bebc637073/X2WOTCCommunityHighlander/Src/XComGame/Classes/CHItemSlot.uc#L390-L425
-	Template.AddCHEvent('OverrideItemUnequipBehavior', ShowUnequipButton, ELD_Immediate);	
-	
-	// https://x2communitycore.github.io/X2WOTCCommunityHighlander/strategy/ShowItemInLockerList/
-	Template.AddCHEvent('OverrideShowItemInLockerList', OnOverrideShowItemInLockerList, ELD_Immediate);	
+	Template.AddCHEvent('OverrideItemUnequipBehavior', ShowUnequipButton, ELD_Immediate);
 
 	return Template; 
-}
-
-static final function EventListenerReturn OnOverrideShowItemInLockerList(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackObject)
-{
-    local XComGameState_Item	ItemState;
-	local XComGameState_Unit	UnitState;
-    local XComLWTuple			Tuple;
-
-    ItemState = XComGameState_Item(EventSource);
-	if (ItemState != none && ItemState.GetWeaponCategory() == 'iri_disposable_launcher')
-	{
-		Tuple = XComLWTuple(EventData);
-		switch (Tuple.Data[1].i)
-		{
-		case eInvSlot_SecondaryWeapon:
-			UnitState = XComGameState_Unit(Tuple.Data[2].o);
-			if (UnitState != none && 
-				IsWeaponAllowedByClassInSlot(UnitState.GetSoldierClassTemplate(), 'iri_disposable_launcher', eInvSlot_SecondaryWeapon))
-			{
-				Tuple.Data[0].b = true;
-			}
-			break;
-		case eInvSlot_HeavyWeapon:
-			Tuple.Data[0].b = true;
-			break;
-		default:
-			break;
-		}
-	}
-    return ELR_NoInterrupt;
-}
-
-static final function bool IsWeaponAllowedByClassInSlot(const X2SoldierClassTemplate ClassTemplate, const name WeaponCat, const EInventorySlot Slot)
-{
-	local SoldierClassWeaponType WeaponType;
-	
-	foreach ClassTemplate.AllowedWeapons(WeaponType)
-	{
-		if (WeaponType.WeaponType == WeaponCat && WeaponType.SlotType == Slot)
-		{
-			return true;
-		}
-	}
-	return false;
 }
 
 static final function EventListenerReturn ShowUnequipButton(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData)
@@ -117,7 +69,15 @@ static final function EventListenerReturn OnGetLocalizedCategory(Object EventDat
 
 	if (Template.WeaponCat == 'iri_disposable_launcher')
 	{
-		Tuple.Data[0].s = class'X2DownloadableContentInfo_WOTCDisposableLaunchers'.default.DRL_WeaponCategory;
+		// Use grenade weapon category so that "only one grenade per soldier" message is more consistent.
+		if (Template.ItemCat == 'grenade')
+		{
+			Tuple.Data[0].s = class'XGLocalizedData'.default.UtilityCatGrenade;
+		}
+		else
+		{
+			Tuple.Data[0].s = class'X2DownloadableContentInfo_WOTCDisposableLaunchers'.default.DRL_WeaponCategory;
+		}
 		EventData = Tuple;
 	}
 	return ELR_NoInterrupt;

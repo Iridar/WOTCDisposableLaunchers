@@ -1,14 +1,14 @@
-class X2DownloadableContentInfo_WOTCDisposableLaunchers extends X2DownloadableContentInfo config(DisposableLaunchers);
+class X2DownloadableContentInfo_WOTCDisposableLaunchers extends X2DownloadableContentInfo;
 
 var localized string DRL_WeaponCategory;
 var localized string DRL_Category;
 var localized string DRL_Not_Allowed_With_Grenades_Message;
 var localized string DRL_Requires_Two_Slots;
-var config bool Utility_DRL_Occupies_Two_Slots;
 
-/*
-TODO: Mutually exclusive with grenades only in utility slot
-*/
+var config(DisposableLaunchers) bool Utility_DRL_Occupies_Two_Slots;
+var config(DisposableLaunchers) array<name> BELT_CARRIED_MELEE_WEAPONS;
+
+var config(TemplateCreator) array<name> AddItemsToHQInventory;
 
 struct BackStruct
 {
@@ -25,101 +25,43 @@ struct BackStruct
 /// <summary>
 /// This method is run when the player loads a saved game directly into Strategy while this DLC is installed
 /// </summary>
-static event OnLoadedSavedGameToStrategy()
+static event OnLoadedSavedGame()
 {
-	local XComGameState_HeadquartersXCom OldXComHQState;	
-	local X2ItemTemplateManager ItemMgr;
-
-	OldXComHQState = XComGameState_HeadquartersXCom(`XCOMHISTORY.GetSingleGameStateObjectForClass(class'XComGameState_HeadquartersXCom'));
-	ItemMgr = class'X2ItemTemplateManager'.static.GetItemTemplateManager();
-
-	if (!HasItem('IRI_RPG_CV_Utility', ItemMgr, OldXComHQState)) AddWeapon('IRI_RPG_CV_Utility');
-	if (!HasItem('IRI_RPG_CV_Secondary', ItemMgr, OldXComHQState)) AddWeapon('IRI_RPG_CV_Secondary');
-
-	if (!HasItem('IRI_RPG_MG_Utility', ItemMgr, OldXComHQState) && OldXComHQState.IsTechResearched(class'X2Item_DisposableLaunchers'.default.RPG_MG_CREATOR_TEMPLATE)) AddWeapon('IRI_RPG_MG_Utility');
-	if (!HasItem('IRI_RPG_MG_Secondary', ItemMgr, OldXComHQState) && OldXComHQState.IsTechResearched(class'X2Item_DisposableLaunchers'.default.RPG_MG_CREATOR_TEMPLATE)) AddWeapon('IRI_RPG_MG_Secondary');
-
-	if (!HasItem('IRI_RPG_BM_Utility', ItemMgr, OldXComHQState) && OldXComHQState.IsTechResearched(class'X2Item_DisposableLaunchers'.default.RPG_BM_CREATOR_TEMPLATE)) AddWeapon('IRI_RPG_BM_Utility');
-	if (!HasItem('IRI_RPG_BM_Secondary', ItemMgr, OldXComHQState) && OldXComHQState.IsTechResearched(class'X2Item_DisposableLaunchers'.default.RPG_BM_CREATOR_TEMPLATE)) AddWeapon('IRI_RPG_BM_Secondary');
-}
-
-exec function IridarGiveMeDisposableLaunchers()
-{
-	local XComGameState_HeadquartersXCom OldXComHQState;	
-	local X2ItemTemplateManager ItemMgr;
-
-	OldXComHQState = XComGameState_HeadquartersXCom(`XCOMHISTORY.GetSingleGameStateObjectForClass(class'XComGameState_HeadquartersXCom'));
-	ItemMgr = class'X2ItemTemplateManager'.static.GetItemTemplateManager();
-
-	if (!HasItem('IRI_RPG_CV_Utility', ItemMgr, OldXComHQState)) AddWeapon('IRI_RPG_CV_Utility');
-	if (!HasItem('IRI_RPG_CV_Secondary', ItemMgr, OldXComHQState)) AddWeapon('IRI_RPG_CV_Secondary');
-
-	if (!HasItem('IRI_RPG_MG_Utility', ItemMgr, OldXComHQState)) AddWeapon('IRI_RPG_MG_Utility');
-	if (!HasItem('IRI_RPG_MG_Secondary', ItemMgr, OldXComHQState)) AddWeapon('IRI_RPG_MG_Secondary');
-
-	if (!HasItem('IRI_RPG_BM_Utility', ItemMgr, OldXComHQState)) AddWeapon('IRI_RPG_BM_Utility');
-	if (!HasItem('IRI_RPG_BM_Secondary', ItemMgr, OldXComHQState)) AddWeapon('IRI_RPG_BM_Secondary');
-}
-
-exec function UnequipDisposableLaunchers()
-{
-	local XComGameState_HeadquartersXCom	OldXComHQState;	
+	local XComGameState_HeadquartersXCom	XComHQ;	
+	local X2ItemTemplateManager				ItemMgr;
+	local name								ItemName;
+	local X2ItemTemplate					ItemTemplate;
 	local XComGameState						NewGameState;
-	local XComGameStateHistory				History;
-	local StateObjectReference				Reference;
-	local XComGameState_Unit				UnitState;
-	local XComGameState_Unit				NewUnitState;
 	local XComGameState_Item				ItemState;
-	//local XComGameState_Item				NewItemState;
-	local X2PairedWeaponTemplate			PairedTemplate;
-	local X2DisposableLauncherTemplate		DRLTemplate;
-	local bool								AddedSomething;
+	local XComGameStateHistory				History;
 
-	History = `XCOMHISTORY;	
+	XComHQ = class'UIUtilities_Strategy'.static.GetXComHQ(true);
+	if (XComHQ == none)
+		return;
 
-	OldXComHQState = XComGameState_HeadquartersXCom(`XCOMHISTORY.GetSingleGameStateObjectForClass(class'XComGameState_HeadquartersXCom'));
-	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Unequipping DRLs from soldiers");
+	ItemMgr = class'X2ItemTemplateManager'.static.GetItemTemplateManager();
+	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Add items to HQ");
+	XComHQ = XComGameState_HeadquartersXCom(NewGameState.ModifyStateObject(XComHQ.Class, XComHQ.ObjectID));
 
-	foreach OldXComHQState.Crew(Reference)
+	foreach default.AddItemsToHQInventory(ItemName)
 	{
-		UnitState = XComGameState_Unit(History.GetGameStateForObjectID(Reference.ObjectID));
+		if (XComHQ.HasItemByName(ItemName))
+			continue;
 
-		if (UnitState.IsSoldier())
-		{
-			//NewUnitState = XComGameState_Unit(NewGameState.CreateStateObject(class'XComGameState_Unit', UnitState.ObjectID));
-			NewUnitState = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', UnitState.ObjectID));
+		ItemTemplate = ItemMgr.FindItemTemplate(ItemName);
+		if (ItemTemplate == none)
+			continue;
 
-			foreach NewUnitState.InventoryItems(Reference)
-			{
-				ItemState = XComGameState_Item(History.GetGameStateForObjectID(Reference.ObjectID));
-
-				PairedTemplate = X2PairedWeaponTemplate(ItemState.GetMyTemplate());
-				DRLTemplate = X2DisposableLauncherTemplate(ItemState.GetMyTemplate());
-
-				if (PairedTemplate != none && PairedTemplate.WeaponCat == 'iri_disposable_launcher' || DRLTemplate != none)
-				{
-					//NewItemState = XComGameState_Item(NewGameState.ModifyStateObject(class'XComGameState_Item', ItemState.ObjectID));
-					//NewGameState.AddStateObject(NewItemState);
-
-					`LOG("Found DRL: " @ ItemState.GetMyTemplateName() @ "equipped on: " @ UnitState.GetFullName(),, 'IRIDRL');
-					if (NewUnitState.RemoveItemFromInventory(ItemState, NewGameState))
-					{
-						`LOG("Removed item: " @ ItemState.GetMyTemplateName() @ "from" @ UnitState.GetFullName(),, 'IRIDRL');
-						//NewGameState.PurgeGameStateForObjectID(NewItemState.ObjectID);
-					}
-					else
-					{	
-						`LOG("Couldn't remove item " @ ItemState.GetMyTemplateName() @ "from" @ UnitState.GetFullName(),, 'IRIDRL');
-					}
-					NewGameState.AddStateObject(NewUnitState);
-					AddedSomething = true;
-				}
-			}
+		if (XComHQ.HasItemByName(ItemTemplate.CreatorTemplateName) || XComHQ.IsTechResearched(ItemTemplate.CreatorTemplateName))
+		{	
+			ItemState = ItemTemplate.CreateInstanceFromTemplate(NewGameState);
+			XComHQ.PutItemInInventory(NewGameState, ItemState);
 		}
 	}
-	if (AddedSomething)
+
+	History = `XCOMHISTORY;
+	if (ItemState != none)
 	{
-		//`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
 		History.AddGameStateToHistory(NewGameState);
 	}
 	else
@@ -174,8 +116,6 @@ static function string DLCAppendSockets(XComUnitPawn Pawn)
 	}
 	return "";
 }
-
-
 
 static function BackStruct HasGrenadeLauncherOrSwordOnTheBack(XComGameState_Unit UnitState)
 {
@@ -273,7 +213,7 @@ static function bool IsMeleeWeaponTemplate(X2WeaponTemplate WeaponTemplate)
 		WeaponTemplate.WeaponCat != 'shield' &&
 		WeaponTemplate.WeaponCat != 'grenade_launcher' &&
 		WeaponTemplate.WeaponCat != 'gauntlet' &&
-		class'X2Item_DisposableLaunchers'.default.BELT_CARRIED_MELEE_WEAPONS.Find(WeaponTemplate.DataName) == INDEX_NONE; // Musashi's combat knives are worn on belt, no reason to adjust DRL position for them
+		default.BELT_CARRIED_MELEE_WEAPONS.Find(WeaponTemplate.DataName) == INDEX_NONE; // Musashi's combat knives are worn on belt, no reason to adjust DRL position for them
 }
 
 static function bool HasItem(name TemplateName, X2ItemTemplateManager ItemMgr, XComGameState_HeadquartersXCom OldXComHQState)
@@ -284,48 +224,6 @@ static function bool HasItem(name TemplateName, X2ItemTemplateManager ItemMgr, X
 
 	return OldXComHQState.HasItem(ItemTemplate);
 }
-
-static function AddWeapon(name TemplateName)
-{
-	local XComGameStateHistory History;
-	local XComGameState NewGameState;
-	local XComGameState_HeadquartersXCom OldXComHQState;	
-	local XComGameState_HeadquartersXCom NewXComHQState;
-	local XComGameState_Item ItemState;
-	local X2ItemTemplateManager ItemMgr;
-	local X2ItemTemplate ItemTemplate;
-
-	//In this method, we demonstrate functionality that will add ExampleWeapon to the player's inventory when loading a saved
-	//game. This allows players to enjoy the content of the mod in campaigns that were started without the mod installed.
-	ItemMgr = class'X2ItemTemplateManager'.static.GetItemTemplateManager();
-	History = `XCOMHISTORY;	
-
-	//Create a pending game state change
-	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Adding EXALT Objects");
-
-	//Get the previous XCom HQ state - we'll need it's ID to create a new state for it
-	OldXComHQState = XComGameState_HeadquartersXCom(History.GetSingleGameStateObjectForClass(class'XComGameState_HeadquartersXCom'));
-
-	//Make the new XCom HQ state. This starts out as just a copy of the previous state.
-	NewXComHQState = XComGameState_HeadquartersXCom(NewGameState.CreateStateObject(class'XComGameState_HeadquartersXCom', OldXComHQState.ObjectID));
-	
-	//Make the changes to the HQ state. Here we add items to the HQ's inventory
-	ItemTemplate = ItemMgr.FindItemTemplate(TemplateName);
-		
-	//Instantiate a new item state object using the template.
-	ItemState = ItemTemplate.CreateInstanceFromTemplate(NewGameState);
-	NewGameState.AddStateObject(ItemState);
-
-	//Add the newly created item to the HQ inventory
-	NewXComHQState.AddItemToHQInventory(ItemState);	
-
-	//Commit the new HQ state object to the state change that we built
-	NewGameState.AddStateObject(NewXComHQState);
-
-	//Commit the state change into the history.
-	History.AddGameStateToHistory(NewGameState);
-}
-
 
 static function GetNumUtilitySlotsOverride(out int NumUtilitySlots, XComGameState_Item EquippedArmor, XComGameState_Unit UnitState, XComGameState CheckGameState)
 {
@@ -353,6 +251,23 @@ static final function bool HasWeaponOfCategoryInSlot(const XComGameState_Unit Un
 	return false;
 }
 
+static final function bool HasWeaponOfCategoryInSlotOtherThan(const XComGameState_Unit UnitState, const name WeaponCat, const EInventorySlot Slot, optional XComGameState CheckGameState)
+{
+	local XComGameState_Item Item;
+	local StateObjectReference ItemRef;
+
+	foreach UnitState.InventoryItems(ItemRef)
+	{
+		Item = UnitState.GetItemGameState(ItemRef, CheckGameState);
+
+		if(Item != none && Item.GetWeaponCategory() == WeaponCat && Item.InventorySlot != Slot)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
 // =========================
 
 static event OnPostTemplatesCreated()
@@ -368,7 +283,7 @@ static event OnPostTemplatesCreated()
 }
 static function EHLDelegateReturn ShouldDisplayDRL_Strategy(XComGameState_Unit UnitState, XComGameState_Item ItemState, out int bDisplayItem, XComUnitPawn UnitPawn, optional XComGameState CheckGameState)
 {
-	if (ItemState.GetWeaponCategory() == 'iri_disposable_launcher')
+	if (ItemState.GetWeaponCategory() == 'iri_disposable_launcher' && !HasWeaponOfCategoryInSlotOtherThan(UnitState, 'iri_disposable_launcher', ItemState.InventorySlot, CheckGameState))
 	{
 		bDisplayItem = 1;
 	}
@@ -376,7 +291,7 @@ static function EHLDelegateReturn ShouldDisplayDRL_Strategy(XComGameState_Unit U
 }
 static function EHLDelegateReturn ShouldDisplayDRL_Tactical(XComGameState_Unit UnitState, XComGameState_Item ItemState, out int bDisplayItem, XGUnit UnitVisualizer, optional XComGameState CheckGameState)
 {
-	if (ItemState.GetWeaponCategory() == 'iri_disposable_launcher')
+	if (ItemState.GetWeaponCategory() == 'iri_disposable_launcher' && !ItemState.bMergedOut)
 	{
 		bDisplayItem = 1;
 	}
@@ -385,8 +300,14 @@ static function EHLDelegateReturn ShouldDisplayDRL_Tactical(XComGameState_Unit U
 
 static function FinalizeUnitAbilitiesForInit(XComGameState_Unit UnitState, out array<AbilitySetupData> SetupData, optional XComGameState StartState, optional XComGameState_Player PlayerState, optional bool bMultiplayerDisplay)
 {
+	local XComGameState_Item ItemState;
 	local XComGameState_Item SecondaryWeapon;
 	local int Index;
+
+	if (StartState != none)
+	{
+		MergeDRLAmmo(UnitState, StartState);
+	}
 
 	// Proceed only if the soldier has a secondary DRL equipped
 	SecondaryWeapon = UnitState.GetItemInSlot(eInvSlot_SecondaryWeapon, StartState);
@@ -401,112 +322,52 @@ static function FinalizeUnitAbilitiesForInit(XComGameState_Unit UnitState, out a
 		{
 			SetupData.Remove(Index, 1);
 		}
+
+		// Also get rid of FireRPG that is pointless on merged out DRLs.
+		if (SetupData[Index].TemplateName == 'IRI_FireRPG')
+		{
+			ItemState = XComGameState_Item(StartState.GetGameStateForObjectID(SetupData[Index].SourceWeaponRef.ObjectID));
+			if (ItemState != none && ItemState.bMergedOut)
+			{
+				SetupData.Remove(Index, 1);
+			}
+		}
 	}
 }
 
-// Show the "Unavailable to this class" error when attempting to equip a DRL secondary on a class that shouldn't be able to do so.
-/*
-static function bool CanAddItemToInventory_CH_Improved(out int bCanAddItem, const EInventorySlot Slot, const X2ItemTemplate ItemTemplate, int Quantity, XComGameState_Unit UnitState, optional XComGameState CheckGameState, optional out string DisabledReason, optional XComGameState_Item ItemState) 
+static final function MergeDRLAmmo(XComGameState_Unit UnitState, XComGameState StartState)
 {
-	local X2WeaponTemplate			Template;
-	local XGParamTag				LocTag;
-	local X2SoldierClassTemplate	ClassTemplate;
+	local XComGameStateHistory	History; 
+	local XComGameState_Item	MainDRL;
+	local XComGameState_Item	ItemState;
+	local int BonusAmmo;
+	local int Idx;
 
-	// Proceed only if called by UI code
-	iF (CheckGameState != none)
-		return false; // DoNotOverrideNormalBehavior
+	History = `XCOMHISTORY; 
 
-	Template = X2WeaponTemplate(ItemTemplate);
-	if (Template == none || Template.WeaponCat != 'iri_disposable_launcher')
-		return false;
-
-	ClassTemplate = UnitState.GetSoldierClassTemplate();
-	if (ClassTemplate == none || IsWeaponAllowedByClassInSlot(ClassTemplate, 'iri_disposable_launcher', eInvSlot_SecondaryWeapon))
-		return false;
-
-	// return "unavailable to this class" error
-	LocTag = XGParamTag(`XEXPANDCONTEXT.FindTag("XGParam"));
-	LocTag.StrValue0 = ClassTemplate.DisplayName;
-	DisabledReason = class'UIUtilities_Text'.static.CapsCheckForGermanScharfesS(`XEXPAND.ExpandString(class'UIArmory_Loadout'.default.m_strUnavailableToClass));
-	bCanAddItem = 0;
-
-	return true; // OverrideNormalBehavior
-}
-*/
-
-
-/*
-static function bool CanAddItemToInventory_CH_Improved(out int bCanAddItem, const EInventorySlot Slot, const X2ItemTemplate ItemTemplate, int Quantity, XComGameState_Unit UnitState, optional XComGameState CheckGameState, optional out string DisabledReason, optional XComGameState_Item ItemState) 
-{
-	local X2PairedWeaponTemplate		Template;
-	local XGParamTag					LocTag;
-	local bool							OverrideNormalBehavior;
-	local bool							DoNotOverrideNormalBehavior;
-	local X2SoldierClassTemplateManager	Manager;
-
-	 // Prepare return values to make it easier for us to read the code.
-	 OverrideNormalBehavior = CheckGameState != none;
-	 DoNotOverrideNormalBehavior = CheckGameState == none;
-
-	 // If there already is a Disabled Reason, it means another mod has already disallowed equipping this item.
-	 // In this case, we do not interfere with that mod's functions for better compatibility.
-	 if(DisabledReason != "")
-		return DoNotOverrideNormalBehavior; 
-
-	// Checks for Disposable Launchers
-	Template = X2PairedWeaponTemplate(ItemTemplate);
-
-	//  This weapon is a variant of the DRL
-	if(Template != none && Template.WeaponCat == 'iri_disposable_launcher')
+	for (Idx = 0; Idx < UnitState.InventoryItems.Length; Idx++)
 	{
-		Manager = class'X2SoldierClassTemplateManager'.static.GetSoldierClassTemplateManager();
-
-		//  if this is a secondary weapon DRL and the soldier class is not allowed to equip it, do nothing
-		if (Template.InventorySlot == eInvSlot_SecondaryWeapon && !Manager.FindSoldierClassTemplate(UnitState.GetSoldierClassTemplateName()).IsWeaponAllowedByClass(Template))
+		ItemState = XComGameState_Item(History.GetGameStateForObjectID(UnitState.InventoryItems[Idx].ObjectID));
+		if (ItemState != none && ItemState.GetWeaponCategory() == 'iri_disposable_launcher')
 		{
-			return DoNotOverrideNormalBehavior;  
-		}
-
-		//	if this is a utility DRL, and it is configured to occupy two slots, allow equipping it only if the soldier has more than one slot.
-		if (default.Utility_DRL_Occupies_Two_Slots && Template.InventorySlot == eInvSlot_Utility)
-		{
-			if (UnitState.GetCurrentStat(eStat_UtilityItems) > 1)
+			if (MainDRL == none)
 			{
-				return DoNotOverrideNormalBehavior;  
+				MainDRL = XComGameState_Item(StartState.ModifyStateObject(ItemState.Class, ItemState.ObjectID));
 			}
-			else 
+			else if (X2WeaponTemplate(MainDRL.GetMyTemplate()).WeaponTech == X2WeaponTemplate(ItemState.GetMyTemplate()).WeaponTech) // Hack, relying on DRLs within each weapon tech to be the same.
 			{
-				DisabledReason = default.DRL_Requires_Two_Slots;
-				bCanAddItem = 0;
-				return OverrideNormalBehavior;
-			}
-		}
+				MainDRL.MergedItemCount++;
 
-		//	spark or a MEC
-		if (!UnitState.CanTakeCover())
-		{
-			// return "unavailable to this class" error
-			LocTag = XGParamTag(`XEXPANDCONTEXT.FindTag("XGParam"));
-			LocTag.StrValue0 = UnitState.GetSoldierClassTemplate().DisplayName;
-			DisabledReason = class'UIUtilities_Text'.static.CapsCheckForGermanScharfesS(`XEXPAND.ExpandString(class'UIArmory_Loadout'.default.m_strUnavailableToClass));
-			bCanAddItem = 0;
-			return OverrideNormalBehavior;
-		}
-		
-		//	if only one DRL per soldier...
-		if (class'X2Item_DisposableLaunchers'.default.MAX_ONE_DRL_PER_SOLDIER)
-		{
-			if (UnitState.HasItemOfTemplateClass(class'X2DisposableLauncherTemplate'))
-			{
-				//DisabledReason = "Only one DRL per soldier";
-				LocTag = XGParamTag(`XEXPANDCONTEXT.FindTag("XGParam"));
-				LocTag.StrValue0 = default.DRL_Category;
-				DisabledReason = class'UIUtilities_Text'.static.CapsCheckForGermanScharfesS(`XEXPAND.ExpandString(class'UIArmory_Loadout'.default.m_strCategoryRestricted));
-				bCanAddItem = 0;
-				return OverrideNormalBehavior;
+				ItemState = XComGameState_Item(StartState.ModifyStateObject(ItemState.Class, ItemState.ObjectID));
+
+				BonusAmmo += UnitState.GetBonusWeaponAmmoFromAbilities(ItemState, StartState); // Unprotect locally	
+				ItemState.bMergedOut = true;
+				ItemState.Ammo = 0;
 			}
 		}
 	}
-	return DoNotOverrideNormalBehavior; //the item could not have possibly been a DRL or a grenade so we don't care
+	if (MainDRL != none)
+	{
+		MainDRL.Ammo = MainDRL.GetClipSize() * MainDRL.MergedItemCount + BonusAmmo;
+	}
 }
-*/
