@@ -30,10 +30,19 @@ tags= war of the chosen, item, weapon</Description>
     <Content Include="Config\Base\XComGameData.ini">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Config\Compatibility\XComScatter.ini">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Config\XComClassData.ini">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Config\XComDisposableLaunchers.ini">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Config\XComTemplateCreator.ini">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Config\XComTemplateEditor.ini">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Config\XComWOTCOpenWeaponRestrictions.ini">
@@ -73,12 +82,6 @@ tags= war of the chosen, item, weapon</Description>
       <SubType>Content</SubType>
     </Content>
     <Content Include="ReadMe.txt" />
-    <Content Include="Src\WOTCDisposableLaunchers\Classes\UIScrollingTextField.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\WOTCDisposableLaunchers\Classes\UIUtilities_DRL.uc">
-      <SubType>Content</SubType>
-    </Content>
     <Content Include="Src\WOTCDisposableLaunchers\Classes\X2Ability_DisposableLaunchers.uc">
       <SubType>Content</SubType>
     </Content>
@@ -94,13 +97,10 @@ tags= war of the chosen, item, weapon</Description>
     <Content Include="Src\WOTCDisposableLaunchers\Classes\X2DownloadableContentInfo_WOTCDisposableLaunchers.uc">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Src\WOTCDisposableLaunchers\Classes\X2Effect_DisposableMobilityPenalty.uc">
+    <Content Include="Src\WOTCDisposableLaunchers\Classes\X2Effect_DRL_Penalty.uc">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Src\WOTCDisposableLaunchers\Classes\X2Effect_IRI_StackAmmo.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\WOTCDisposableLaunchers\Classes\X2EventListener_UnequipDRL.uc">
+    <Content Include="Src\WOTCDisposableLaunchers\Classes\X2EventListener_DRL.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\WOTCDisposableLaunchers\Classes\X2Item_DisposableLaunchers.uc">
@@ -109,16 +109,14 @@ tags= war of the chosen, item, weapon</Description>
     <Content Include="Src\WOTCDisposableLaunchers\Classes\X2StrategyElement_DisposableLauncherSlot.uc">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Src\WOTCDisposableLaunchers\Classes\X2TargetingMethod_DisposableLauncher.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\WOTCDisposableLaunchers\Classes\X2UtilityDisposableLauncherTemplate.uc">
+    <Content Include="Src\WOTCDisposableLaunchers\Classes\XComGameState_Item_DRL.uc">
       <SubType>Content</SubType>
     </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Config" />
     <Folder Include="Config\Base" />
+    <Folder Include="Config\Compatibility" />
     <Folder Include="Content" />
     <Folder Include="Localization" />
     <Folder Include="Src" />

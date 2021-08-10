@@ -61,7 +61,7 @@ var config bool MOBILITY_PENALTY_IS_COUNTED_PER_ROCKET;
 var config bool MOBILITY_PENALTY_IS_APPLIED_TO_HEAVY_ARMOR;
 
 var config array<name> BELT_CARRIED_MELEE_WEAPONS;
-
+/*
 static function array<X2DataTemplate> CreateTemplates()
 {
 	local array<X2DataTemplate> Templates;
@@ -83,13 +83,13 @@ static function array<X2DataTemplate> CreateTemplates()
 
 	return Templates;
 }
-
+*/
 //	*********************************************
 //	*********************************************
 //				COMMON CODE
 //	*********************************************
 //	*********************************************
-
+/*
 static function X2DisposableLauncherTemplate Setup_DisposableLauncher(name TemplateName)
 {
 	local X2DisposableLauncherTemplate	Template;
@@ -108,10 +108,10 @@ static function X2DisposableLauncherTemplate Setup_DisposableLauncher(name Templ
 	Template.InventorySlot = default.RPG_Inventory_Slot;
 	Template.bMergeAmmo = false;	//	the Highlander inventory slot cannot be a Multi Item slot and be displayed on the soldier at the same time.
 									//	So I had to write a sort of Aggregate Ammo ability that triggers at mission start.
-/*
-	Template.WeaponPrecomputedPathData.InitialPathTime = 1.0f;
-	Template.WeaponPrecomputedPathData.MaxPathTime = 2.5f;
-	Template.WeaponPrecomputedPathData.MaxNumberOfBounces = 0;*/
+
+	//Template.WeaponPrecomputedPathData.InitialPathTime = 1.0f;
+	//Template.WeaponPrecomputedPathData.MaxPathTime = 2.5f;
+	//Template.WeaponPrecomputedPathData.MaxNumberOfBounces = 0;
 
 	WeaponDamageEffect = new class'X2Effect_ApplyWeaponDamage';
 	WeaponDamageEffect.bExplosiveDamage = true;
@@ -248,10 +248,10 @@ static function X2DataTemplate Create_IRI_RPG_CV_Secondary()
 	Template.WeaponCat = default.RPG_Secondary_WeaponCat;
 
 	Template.UIStatMarkups.Remove(3, 1);	// remove previously configured stat markup for mobility penalty
-	/*
-	Template.GameArchetype = "AT4_Assets.Archetypes.WP_AT4";
-	Template.UIArmoryCameraPointTag = 'UIPawnLocation_WeaponUpgrade_Shotgun';
-	Template.WeaponPanelImage = "_ConventionalShotgun";*/
+	
+	//Template.GameArchetype = "AT4_Assets.Archetypes.WP_AT4";
+	//Template.UIArmoryCameraPointTag = 'UIPawnLocation_WeaponUpgrade_Shotgun';
+	//Template.WeaponPanelImage = "_ConventionalShotgun";
 
 	return Template;
 }
@@ -515,4 +515,4 @@ static function X2DataTemplate Create_IRI_RPG_BM_Heavy()
 	Template.UIStatMarkups.Remove(3, 1);
 
 	return Template;
-}
+}*/

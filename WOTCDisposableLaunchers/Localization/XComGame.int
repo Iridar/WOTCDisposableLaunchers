@@ -9,48 +9,11 @@ LocLongDescription="Fire the Disposable Rocket Launcher. The shot can scatter."
 LocHelpText="The shot can scatter"
 LocFlyOverText="Firing Rocket"
 
-[IRI_RPG_CV_Secondary X2PairedWeaponTemplate]
-FriendlyName="RPG (S)"
-FriendlyNamePlural="RPGs (S)"
-BriefSummary="We managed to secure a large supply of these single use RPGs from one of the munitions depots leftover from the original XCOM project. They are highly effective against armored targets and groups of enemies, but can be unwieldy to use."
-TacticalText="We managed to secure a large supply of these single use RPGs from one of the munitions depots leftover from the original XCOM project. They are highly effective against armored targets and groups of enemies, but can be unwieldy to use. <br/><Bullet/> Unlike grenades, rockets can scatter and miss their target. Scatter gets worse if the rocket is fired while the soldier has only one action remaining or when taking long-distance shots. \n<Bullet/> Carrying a CRAG in a Utility Slot incurs a mobility penalty until it is fired. \n<Bullet/> Heavy Armor users do not suffer the mobility penalty."
-
-[IRI_RPG_CV_Heavy X2PairedWeaponTemplate]
-FriendlyName="RPG (H)"
-FriendlyNamePlural="RPGs (H)"
-BriefSummary="We managed to secure a large supply of these single use RPGs from one of the munitions depots leftover from the original XCOM project. They are highly effective against armored targets and groups of enemies, but can be unwieldy to use."
-TacticalText="We managed to secure a large supply of these single use RPGs from one of the munitions depots leftover from the original XCOM project. They are highly effective against armored targets and groups of enemies, but can be unwieldy to use. <br/><Bullet/> Unlike grenades, rockets can scatter and miss their target. Scatter gets worse if the rocket is fired while the soldier has only one action remaining or when taking long-distance shots. \n<Bullet/> Carrying a BFG in a Utility Slot incurs a mobility penalty until it is fired. \n<Bullet/> Heavy Armor users do not suffer the mobility penalty."
-
-[IRI_RPG_MG_Secondary X2PairedWeaponTemplate]
-FriendlyName="CRAG (S)"
-FriendlyNamePlural="CRAGs (S)"
-BriefSummary="CRAG uses overclocked magnetic coils to rapidly accelerate a modified Alien Grenade, launching it at supersonic speeds. Unfortunately, without a heavy and bulky compensation and cooling unit, the coil lining invariably fries during the shot, making this launcher unfit for reuse."
-TacticalText="CRAG uses overclocked magnetic coils to rapidly accelerate a modified Alien Grenade, launching it at supersonic speeds. Unfortunately, without a heavy and bulky compensation and cooling unit, the coil lining invariably fries during the shot, making this launcher unfit for reuse. <br/><Bullet/> Unlike grenades, rockets can scatter and miss their target. Scatter gets worse if the rocket is fired while the soldier has only one action remaining or when taking long-distance shots."
-
-[IRI_RPG_MG_Heavy X2PairedWeaponTemplate]
-FriendlyName="CRAG (H)"
-FriendlyNamePlural="CRAGs (H)"
-BriefSummary="CRAG uses overclocked magnetic coils to rapidly accelerate a modified Alien Grenade, launching it at supersonic speeds. Unfortunately, without a heavy and bulky compensation and cooling unit, the coil lining invariably fries during the shot, making this launcher unfit for reuse."
-TacticalText="CRAG uses overclocked magnetic coils to rapidly accelerate a modified Alien Grenade, launching it at supersonic speeds. Unfortunately, without a heavy and bulky compensation and cooling unit, the coil lining invariably fries during the shot, making this launcher unfit for reuse. <br/><Bullet/> Unlike grenades, rockets can scatter and miss their target. Scatter gets worse if the rocket is fired while the soldier has only one action remaining or when taking long-distance shots."
-
-[IRI_RPG_BM_Secondary X2PairedWeaponTemplate]
-FriendlyName="BFG (S)"
-FriendlyNamePlural="BFGs (S)"
-BriefSummary="Binary Fusion Grenade uses a conventional explosive charge to implode an Elerium Core, giving it a significant potential as an explosive. BFG uses condensed atmosphere air to supercool the Core to delay the chain reaction. The core is then immediately launched via no-contact gravitation fields."
-TacticalText="Binary Fusion Grenade uses a conventional explosive charge to implode an Elerium Core, giving it a significant potential as an explosive. BFG uses condensed atmosphere air to supercool the Core to delay the chain reaction. The core is then immediately launched via no-contact gravitation fields. <br/><Bullet/> Unlike grenades, rockets can scatter and miss their target. Scatter gets worse if the rocket is fired while the soldier has only one action remaining or when taking long-distance shots."
-
-[IRI_RPG_BM_Heavy X2PairedWeaponTemplate]
-FriendlyName="BFG (H)"
-FriendlyNamePlural="BFGs (H)"
-BriefSummary="Binary Fusion Grenade uses a conventional explosive charge to implode an Elerium Core, giving it a significant potential as an explosive. BFG uses condensed atmosphere air to supercool the Core to delay the chain reaction. The core is then immediately launched via no-contact gravitation fields."
-TacticalText="Binary Fusion Grenade uses a conventional explosive charge to implode an Elerium Core, giving it a significant potential as an explosive. BFG uses condensed atmosphere air to supercool the Core to delay the chain reaction. The core is then immediately launched via no-contact gravitation fields. <br/><Bullet/> Unlike grenades, rockets can scatter and miss their target. Scatter gets worse if the rocket is fired while the soldier has only one action remaining or when taking long-distance shots."
-
-
 [X2Photobooth]
-+m_arrAnimationPoses=(AnimationDisplayName="RPG - Firing")
-+m_arrAnimationPoses=(AnimationDisplayName="RPG - On shoulder")
-+m_arrAnimationPoses=(AnimationDisplayName="RPG - Kneeling")
-+m_arrAnimationPoses=(AnimationDisplayName="RPG - Leon S. Kennedy")
-+m_arrAnimationPoses=(AnimationDisplayName="RPG - On the radio")
-+m_arrAnimationPoses=(AnimationDisplayName="RPG - Wakey wakey!")
+.m_arrAnimationPoses=(AnimationDisplayName="RPG - Firing")
+.m_arrAnimationPoses=(AnimationDisplayName="RPG - On shoulder")
+.m_arrAnimationPoses=(AnimationDisplayName="RPG - Kneeling")
+.m_arrAnimationPoses=(AnimationDisplayName="RPG - Leon S. Kennedy")
+.m_arrAnimationPoses=(AnimationDisplayName="RPG - On the radio")
+.m_arrAnimationPoses=(AnimationDisplayName="RPG - Wakey wakey!")
 ;+m_arrAnimationPoses=(AnimationDisplayName="RPG - Demo")

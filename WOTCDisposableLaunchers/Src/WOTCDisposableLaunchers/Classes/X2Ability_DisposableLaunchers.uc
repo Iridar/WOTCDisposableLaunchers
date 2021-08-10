@@ -4,25 +4,54 @@ static function array<X2DataTemplate> CreateTemplates()
 {
 	local array<X2DataTemplate> Templates;
 
-	Templates.AddItem(Create_IRI_FireRPG());
-	Templates.AddItem(Create_IRI_MobilityPenalty());
-	Templates.AddItem(Create_IRI_DisposableStackAmmo());
+	Templates.AddItem(IRI_FireRPG());
+	Templates.AddItem(IRI_PenaltyRPG());
 
 	return Templates;
 }
 
-static function X2AbilityTemplate Create_IRI_FireRPG()
+static function X2AbilityTemplate IRI_FireRPG()
 {
 	local X2AbilityTemplate                 Template;	
 	local X2AbilityCost_Ammo                AmmoCost;
 	local X2AbilityCost_ActionPoints        ActionPointCost;
 	local X2AbilityTarget_Cursor            CursorTarget;
 	local X2AbilityMultiTarget_Radius       RadiusMultiTarget;
-	local X2Condition_UnitProperty          UnitPropertyCondition;
 	local X2AbilityToHitCalc_StandardAim    StandardAim;
+	local X2Effect_ApplyWeaponDamage		WeaponDamageEffect;
+	local X2Effect_Knockback				KnockbackEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'IRI_FireRPG');
-	
+
+	// Icon setup
+	Template.AbilitySourceName = 'eAbilitySource_Standard';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_HideSpecificErrors;
+	Template.HideErrors.AddItem('AA_CannotAfford_AmmoCost');
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_firerocket";
+	Template.bUseAmmoAsChargesForHUD = true;
+
+	// Targeting and Triggering
+	Template.TargetingMethod = class'X2TargetingMethod_RocketLauncher';	
+	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
+
+	StandardAim = new class'X2AbilityToHitCalc_StandardAim';
+	StandardAim.bGuaranteedHit = true;
+	StandardAim.bIndirectFire = true;
+	Template.AbilityToHitCalc = StandardAim;
+
+	CursorTarget = new class'X2AbilityTarget_Cursor';
+	CursorTarget.bRestrictToWeaponRange = true;
+	Template.AbilityTargetStyle = CursorTarget;
+
+	RadiusMultiTarget = new class'X2AbilityMultiTarget_Radius';
+	RadiusMultiTarget.bUseWeaponRadius = true;
+	Template.AbilityMultiTargetStyle = RadiusMultiTarget;
+
+	// Shooter Conditions
+	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+	Template.AddShooterEffectExclusions();
+
+	// Costs
 	ActionPointCost = new class'X2AbilityCost_ActionPoints';
 	ActionPointCost.iNumPoints = class'X2Item_DisposableLaunchers'.default.RPG_ACTION_POINT_COST;
 	ActionPointCost.bConsumeAllPoints = class'X2Item_DisposableLaunchers'.default.RPG_ACTION_POINT_ENDS_TURN;
@@ -33,54 +62,18 @@ static function X2AbilityTemplate Create_IRI_FireRPG()
 	AmmoCost.iAmmo = 1;
 	Template.AbilityCosts.AddItem(AmmoCost);
 	
-	StandardAim = new class'X2AbilityToHitCalc_StandardAim';
-	StandardAim.bGuaranteedHit = true;
-	StandardAim.bIndirectFire = true;
-	Template.AbilityToHitCalc = StandardAim;
+	// Effects
+	WeaponDamageEffect = new class'X2Effect_ApplyWeaponDamage';
+	WeaponDamageEffect.bExplosiveDamage = true;
+	Template.AddMultiTargetEffect(WeaponDamageEffect);
 
-	Template.bUseThrownGrenadeEffects = true;
-	Template.bHideAmmoWeaponDuringFire = false; // hide the grenade
+	KnockbackEffect = new class'X2Effect_Knockback';
+	KnockbackEffect.KnockbackDistance = 2;
+	Template.AddMultiTargetEffect(KnockbackEffect);
 
-	CursorTarget = new class'X2AbilityTarget_Cursor';
-	CursorTarget.bRestrictToWeaponRange = true;
-	Template.AbilityTargetStyle = CursorTarget;
-
-	RadiusMultiTarget = new class'X2AbilityMultiTarget_Radius';
-	RadiusMultiTarget.bUseWeaponRadius = true;
-	Template.AbilityMultiTargetStyle = RadiusMultiTarget;
-
-	UnitPropertyCondition = new class'X2Condition_UnitProperty';
-	UnitPropertyCondition.ExcludeDead = true;
-	Template.AbilityShooterConditions.AddItem(UnitPropertyCondition);
-
-	Template.AddShooterEffectExclusions();
-
-	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
-	
-	Template.AbilitySourceName = 'eAbilitySource_Standard';
-	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_HideSpecificErrors;
-	Template.HideErrors.AddItem('AA_CannotAfford_AmmoCost');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_firerocket";
-	Template.bUseAmmoAsChargesForHUD = true;
-
-	if (class'X2Item_DisposableLaunchers'.default.DISABLE_ROCKET_SCATTER)
-	{
-		Template.TargetingMethod = class'X2TargetingMethod_RocketLauncher';
-	}
-	else
-	{
-		Template.TargetingMethod = class'X2TargetingMethod_DisposableLauncher';
-	}
-	
-	Template.DamagePreviewFn = class'X2Ability_Grenades'.static.GrenadeDamagePreview;
-
+	// State and Viz
 	Template.ActivationSpeech = 'RocketLauncher';
-	//Template.CustomFireAnim = 'FF_IRI_FireRocketA';
-
-	//Template.CinescriptCameraType = "Grenadier_GrenadeLauncher";
-	//Template.CinescriptCameraType = "Soldier_HeavyWeapons";
 	Template.CinescriptCameraType = "Iridar_DisposableLauncher";
-	
 	Template.ActionFireClass = class'X2Action_FireDisposableLauncher';
 
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
@@ -93,13 +86,13 @@ static function X2AbilityTemplate Create_IRI_FireRPG()
 	return Template;	
 }
 
-static function X2AbilityTemplate Create_IRI_MobilityPenalty()
+static function X2AbilityTemplate IRI_PenaltyRPG()
 {
 	local X2AbilityTemplate						Template;	
-	local X2Effect_DisposableMobilityPenalty	MobilityDamageEffect;
+	local X2Effect_DRL_Penalty	MobilityDamageEffect;
 	local X2AbilityTrigger_EventListener		Trigger;
 
-	`CREATE_X2ABILITY_TEMPLATE(Template, 'IRI_DisposableMobilityPenalty');
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'IRI_PenaltyRPG');
 
 	Template.AbilitySourceName = 'eAbilitySource_Perk';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
@@ -124,42 +117,12 @@ static function X2AbilityTemplate Create_IRI_MobilityPenalty()
 	Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
 	Template.AbilityTriggers.AddItem(Trigger);
 
-	MobilityDamageEffect = new class 'X2Effect_DisposableMobilityPenalty';
+	MobilityDamageEffect = new class 'X2Effect_DRL_Penalty';
 	MobilityDamageEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnEnd);
 	MobilityDamageEffect.SetDisplayInfo(ePerkBuff_Passive,Template.LocFriendlyName, Template.GetMyHelpText(), Template.IconImage,,, Template.AbilitySourceName);
 	MobilityDamageEffect.DuplicateResponse = eDupe_Ignore;
 	MobilityDamageEffect.EffectName = 'IRI_MobilityPenalty';
 	Template.AddShooterEffect(MobilityDamageEffect);
-
-	Template.bDisplayInUITacticalText = false;
-	Template.bShowActivation = false;
-	Template.bSkipFireAction = true;
-	Template.bUniqueSource = true;
-	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
-
-	return Template;	
-}
-
-static function X2AbilityTemplate Create_IRI_DisposableStackAmmo()
-{
-	local X2AbilityTemplate					Template;	
-
-	`CREATE_X2ABILITY_TEMPLATE(Template, 'IRI_DisposableStackAmmo');
-
-	Template.AbilitySourceName = 'eAbilitySource_Perk';
-	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
-	Template.Hostility = eHostility_Neutral;
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_heavy_rockets";
-
-	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
-
-	Template.AbilityToHitCalc = default.DeadEye;
-	Template.AbilityTargetStyle = default.SelfTarget;
-
-	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
-
-	Template.AddShooterEffect(new class'X2Effect_IRI_StackAmmo');
 
 	Template.bDisplayInUITacticalText = false;
 	Template.bShowActivation = false;

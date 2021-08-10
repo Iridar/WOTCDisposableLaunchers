@@ -6,6 +6,10 @@ var localized string DRL_Not_Allowed_With_Grenades_Message;
 var localized string DRL_Requires_Two_Slots;
 var config bool Utility_DRL_Occupies_Two_Slots;
 
+/*
+TODO: Mutually exclusive with grenades only in utility slot
+*/
+
 struct BackStruct
 {
 	var bool HasGL;
@@ -171,55 +175,7 @@ static function string DLCAppendSockets(XComUnitPawn Pawn)
 	return "";
 }
 
-//	Using a hook to remove instances of Launch Grenade ability attached to rockets, since they're not intended to be launchable with grenade launchers (duh)
-static function FinalizeUnitAbilitiesForInit(XComGameState_Unit UnitState, out array<AbilitySetupData> SetupData, optional XComGameState StartState, optional XComGameState_Player PlayerState, optional bool bMultiplayerDisplay)
-{
-	local XComGameState_Item	ItemState;
-	local XComGameStateHistory	History;
-	local StateObjectReference	Ref; 
-	local bool HasGrenadeLauncher;
-	local int Index;
 
-	if (!UnitState.IsSoldier())	return;
-
-	History = `XCOMHISTORY;
-
-	foreach UnitState.InventoryItems(Ref)
-	{
-		ItemState = XComGameState_Item(History.GetGameStateForObjectID(Ref.ObjectID));
-
-		if (X2GrenadeLauncherTemplate(ItemState.GetMyTemplate()) != none)
-		{
-			HasGrenadeLauncher = true;
-			break;
-		}
-	}
-
-	for (Index = SetupData.Length - 1; Index >= 0; Index--)
-	{
-		if (SetupData[Index].Template.bUseLaunchedGrenadeEffects)
-		{
-			ItemState = XComGameState_Item(History.GetGameStateForObjectID(SetupData[Index].SourceAmmoRef.ObjectID));
-
-			//	Remove 'Launche Grenade' from disposable rocket launchers
-			if(ItemState != none && X2DisposableLauncherTemplate(ItemState.GetMyTemplate()) != none) 
-			{
-				SetupData.Remove(Index, 1);
-			}
-			else 
-			{
-				//	Remove 'Launche Grenade' from grenades too if the soldier doesn't have a grenade launcher equipped
-				if (!HasGrenadeLauncher)
-				{
-					if(X2GrenadeTemplate(ItemState.GetMyTemplate()) != none) 
-					{
-						SetupData.Remove(Index, 1);
-					}
-				}
-			}
-		}
-	}
-}
 
 static function BackStruct HasGrenadeLauncherOrSwordOnTheBack(XComGameState_Unit UnitState)
 {
@@ -370,35 +326,145 @@ static function AddWeapon(name TemplateName)
 	History.AddGameStateToHistory(NewGameState);
 }
 
+
+static function GetNumUtilitySlotsOverride(out int NumUtilitySlots, XComGameState_Item EquippedArmor, XComGameState_Unit UnitState, XComGameState CheckGameState)
+{
+	if (default.Utility_DRL_Occupies_Two_Slots && NumUtilitySlots > 1 && HasWeaponOfCategoryInSlot(UnitState, 'iri_disposable_launcher', eInvSlot_Utility, CheckGameState))
+	{
+		// If you ever have some kind of inventory operation that fails to fix the stat, you can manually call ValidateLoadout (or just RealizeItemSlotsCount, CHL only) (c) robojumper
+		NumUtilitySlots--;
+	}
+}
+
+static final function bool HasWeaponOfCategoryInSlot(const XComGameState_Unit UnitState, const name WeaponCat, const EInventorySlot Slot, optional XComGameState CheckGameState)
+{
+	local XComGameState_Item Item;
+	local StateObjectReference ItemRef;
+
+	foreach UnitState.InventoryItems(ItemRef)
+	{
+		Item = UnitState.GetItemGameState(ItemRef, CheckGameState);
+
+		if(Item != none && Item.GetWeaponCategory() == WeaponCat && Item.InventorySlot == Slot)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+// =========================
+
+static event OnPostTemplatesCreated()
+{
+	local CHHelpers	CHHelpersObj;
+
+	CHHelpersObj = class'CHHelpers'.static.GetCDO();
+	if (CHHelpersObj != none)
+	{		
+		CHHelpersObj.AddShouldDisplayMultiSlotItemInStrategyCallback(ShouldDisplayDRL_Strategy);
+		CHHelpersObj.AddShouldDisplayMultiSlotItemInTacticalCallback(ShouldDisplayDRL_Tactical);
+	}
+}
+static function EHLDelegateReturn ShouldDisplayDRL_Strategy(XComGameState_Unit UnitState, XComGameState_Item ItemState, out int bDisplayItem, XComUnitPawn UnitPawn, optional XComGameState CheckGameState)
+{
+	if (ItemState.GetWeaponCategory() == 'iri_disposable_launcher')
+	{
+		bDisplayItem = 1;
+	}
+	return EHLDR_NoInterrupt;
+}
+static function EHLDelegateReturn ShouldDisplayDRL_Tactical(XComGameState_Unit UnitState, XComGameState_Item ItemState, out int bDisplayItem, XGUnit UnitVisualizer, optional XComGameState CheckGameState)
+{
+	if (ItemState.GetWeaponCategory() == 'iri_disposable_launcher')
+	{
+		bDisplayItem = 1;
+	}
+	return EHLDR_NoInterrupt;
+}
+
+static function FinalizeUnitAbilitiesForInit(XComGameState_Unit UnitState, out array<AbilitySetupData> SetupData, optional XComGameState StartState, optional XComGameState_Player PlayerState, optional bool bMultiplayerDisplay)
+{
+	local XComGameState_Item SecondaryWeapon;
+	local int Index;
+
+	// Proceed only if the soldier has a secondary DRL equipped
+	SecondaryWeapon = UnitState.GetItemInSlot(eInvSlot_SecondaryWeapon, StartState);
+	if (SecondaryWeapon == none || SecondaryWeapon.GetWeaponCategory() != 'iri_disposable_launcher')
+		return;
+
+	// Cycle through soldier's abilities and see if they have any abilities applied to the secondary weapon (so DRL) 
+	// that use launched grenade effects (e.g. Launch Grenade), and if so - remove them.
+	for (Index = SetupData.Length - 1; Index >= 0; Index--)
+	{
+		if (SetupData[Index].Template.bUseLaunchedGrenadeEffects && SecondaryWeapon.ObjectID == SetupData[Index].SourceWeaponRef.ObjectID)
+		{
+			SetupData.Remove(Index, 1);
+		}
+	}
+}
+
+// Show the "Unavailable to this class" error when attempting to equip a DRL secondary on a class that shouldn't be able to do so.
+/*
 static function bool CanAddItemToInventory_CH_Improved(out int bCanAddItem, const EInventorySlot Slot, const X2ItemTemplate ItemTemplate, int Quantity, XComGameState_Unit UnitState, optional XComGameState CheckGameState, optional out string DisabledReason, optional XComGameState_Item ItemState) 
 {
-    local X2PairedWeaponTemplate        Template;
-    local XGParamTag                    LocTag;
-    local bool							OverrideNormalBehavior;
-    local bool							DoNotOverrideNormalBehavior;
+	local X2WeaponTemplate			Template;
+	local XGParamTag				LocTag;
+	local X2SoldierClassTemplate	ClassTemplate;
+
+	// Proceed only if called by UI code
+	iF (CheckGameState != none)
+		return false; // DoNotOverrideNormalBehavior
+
+	Template = X2WeaponTemplate(ItemTemplate);
+	if (Template == none || Template.WeaponCat != 'iri_disposable_launcher')
+		return false;
+
+	ClassTemplate = UnitState.GetSoldierClassTemplate();
+	if (ClassTemplate == none || IsWeaponAllowedByClassInSlot(ClassTemplate, 'iri_disposable_launcher', eInvSlot_SecondaryWeapon))
+		return false;
+
+	// return "unavailable to this class" error
+	LocTag = XGParamTag(`XEXPANDCONTEXT.FindTag("XGParam"));
+	LocTag.StrValue0 = ClassTemplate.DisplayName;
+	DisabledReason = class'UIUtilities_Text'.static.CapsCheckForGermanScharfesS(`XEXPAND.ExpandString(class'UIArmory_Loadout'.default.m_strUnavailableToClass));
+	bCanAddItem = 0;
+
+	return true; // OverrideNormalBehavior
+}
+*/
+
+
+/*
+static function bool CanAddItemToInventory_CH_Improved(out int bCanAddItem, const EInventorySlot Slot, const X2ItemTemplate ItemTemplate, int Quantity, XComGameState_Unit UnitState, optional XComGameState CheckGameState, optional out string DisabledReason, optional XComGameState_Item ItemState) 
+{
+	local X2PairedWeaponTemplate		Template;
+	local XGParamTag					LocTag;
+	local bool							OverrideNormalBehavior;
+	local bool							DoNotOverrideNormalBehavior;
 	local X2SoldierClassTemplateManager	Manager;
 
-    // Prepare return values to make it easier for us to read the code.
-    OverrideNormalBehavior = CheckGameState != none;
-    DoNotOverrideNormalBehavior = CheckGameState == none;
+	 // Prepare return values to make it easier for us to read the code.
+	 OverrideNormalBehavior = CheckGameState != none;
+	 DoNotOverrideNormalBehavior = CheckGameState == none;
 
-    // If there already is a Disabled Reason, it means another mod has already disallowed equipping this item.
-    // In this case, we do not interfere with that mod's functions for better compatibility.
-    if(DisabledReason != "")
-        return DoNotOverrideNormalBehavior; 
+	 // If there already is a Disabled Reason, it means another mod has already disallowed equipping this item.
+	 // In this case, we do not interfere with that mod's functions for better compatibility.
+	 if(DisabledReason != "")
+		return DoNotOverrideNormalBehavior; 
 
 	// Checks for Disposable Launchers
-    Template = X2PairedWeaponTemplate(ItemTemplate);
+	Template = X2PairedWeaponTemplate(ItemTemplate);
 
-    //  This weapon is a variant of the DRL
-    if(Template != none && Template.WeaponCat == 'iri_disposable_launcher')
-    {
-        Manager = class'X2SoldierClassTemplateManager'.static.GetSoldierClassTemplateManager();
+	//  This weapon is a variant of the DRL
+	if(Template != none && Template.WeaponCat == 'iri_disposable_launcher')
+	{
+		Manager = class'X2SoldierClassTemplateManager'.static.GetSoldierClassTemplateManager();
 
-        //  if this is a secondary weapon DRL and the soldier class is not allowed to equip it, do nothing
-        if (Template.InventorySlot == eInvSlot_SecondaryWeapon && !Manager.FindSoldierClassTemplate(UnitState.GetSoldierClassTemplateName()).IsWeaponAllowedByClass(Template))
+		//  if this is a secondary weapon DRL and the soldier class is not allowed to equip it, do nothing
+		if (Template.InventorySlot == eInvSlot_SecondaryWeapon && !Manager.FindSoldierClassTemplate(UnitState.GetSoldierClassTemplateName()).IsWeaponAllowedByClass(Template))
 		{
-            return DoNotOverrideNormalBehavior;     
+			return DoNotOverrideNormalBehavior;  
 		}
 
 		//	if this is a utility DRL, and it is configured to occupy two slots, allow equipping it only if the soldier has more than one slot.
@@ -440,91 +506,7 @@ static function bool CanAddItemToInventory_CH_Improved(out int bCanAddItem, cons
 				return OverrideNormalBehavior;
 			}
 		}
-    }
-    return DoNotOverrideNormalBehavior; //the item could not have possibly been a DRL or a grenade so we don't care
-}
-
-static function GetNumUtilitySlotsOverride(out int NumUtilitySlots, XComGameState_Item EquippedArmor, XComGameState_Unit UnitState, XComGameState CheckGameState)
-{
-	if (default.Utility_DRL_Occupies_Two_Slots && NumUtilitySlots > 1 && UnitHasUtilityDRLEquipped(UnitState))
-	{
-		// If you ever have some kind of inventory operation that fails to fix the stat, you can manually call ValidateLoadout (or just RealizeItemSlotsCount, CHL only) (c) robojumper
-		NumUtilitySlots--;
 	}
+	return DoNotOverrideNormalBehavior; //the item could not have possibly been a DRL or a grenade so we don't care
 }
-
-//	this function will cycle through all inventory items of a given unit and return true if one of them is an offensive grenade in a utility slot
-/*
-static function bool UnitHasGrenadeEquipped(XComGameState_Unit UnitState)
-{
-	local array<XComGameState_Item> Items;
-	local XComGameState_Item		Item;
-
-	Items = UnitState.GetAllInventoryItems(, true);
-	foreach Items(Item)
-	{
-		if (ItemTemplateIsAGrenade(Item.GetMyTemplate()))
-		{
-			return true;
-		}
-	}
-	return false;
-}
-
-static function int GetNumberOfUtilityItems(XComGameState_Unit UnitState)
-{
-	local array<XComGameState_Item> Items;
-	local XComGameState_Item		Item;
-	local int iValue;
-
-	Items = UnitState.GetAllInventoryItems(, true);
-	foreach Items(Item)
-	{
-		if (Item.InventorySlot == eInvSlot_Utility) iValue++;
-	}
-	return iValue;
-}
-
-
-static function bool ItemTemplateIsAGrenade(X2ItemTemplate ItemTemplate)
-{
-	local X2GrenadeTemplate Template;
-
-	Template = X2GrenadeTemplate(ItemTemplate);
-
-	if(Template != none && Template.InventorySlot == eInvSlot_Utility && Template.WeaponCat == 'grenade' && Template.ItemCat == 'grenade')
-	{
-		return true;
-	}
-	return false;
-}
-
 */
-static function bool UnitHasUtilityDRLEquipped(XComGameState_Unit UnitState)
-{
-	local array<XComGameState_Item> Items;
-	local XComGameState_Item		Item;
-	
-	Items = UnitState.GetAllInventoryItems(, true);
-	foreach Items(Item)
-	{
-		if (ItemTemplateIsAUtilityDRL(Item.GetMyTemplate()))
-		{
-			return true;
-		}
-	}
-	return false;
-}
-
-static function bool ItemTemplateIsAUtilityDRL(X2ItemTemplate ItemTemplate)
-{
-	local X2PairedWeaponTemplate	Template;
-
-	Template = X2PairedWeaponTemplate(ItemTemplate);
-
-	if(Template != none && Template.InventorySlot == eInvSlot_Utility && Template.WeaponCat == 'iri_disposable_launcher')
-	{
-		return true;
-	}
-	return false;
-}
