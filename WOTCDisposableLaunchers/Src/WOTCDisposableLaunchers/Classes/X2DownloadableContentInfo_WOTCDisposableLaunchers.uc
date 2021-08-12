@@ -3,12 +3,25 @@ class X2DownloadableContentInfo_WOTCDisposableLaunchers extends X2DownloadableCo
 var localized string DRL_WeaponCategory;
 var localized string DRL_Category;
 var localized string DRL_Not_Allowed_With_Grenades_Message;
-var localized string DRL_Requires_Two_Slots;
+var localized string DRL_Requires_Two_Utility_Slots;
 
-var config(DisposableLaunchers) bool Utility_DRL_Occupies_Two_Slots;
+//var config(DisposableLaunchers) bool Utility_DRL_Occupies_Two_Slots;
+//var config(DisposableLaunchers) bool Utility_DRL_Mutually_Exclusive_With_Grenades;
 var config(DisposableLaunchers) array<name> BELT_CARRIED_MELEE_WEAPONS;
 
 var config(TemplateCreator) array<name> AddItemsToHQInventory;
+
+var private X2GrenadeTemplate DummyGrenadeTemplate;
+
+// Future Iridar, here's the current state of the mod:
+// Everything appears to be working, but you'll have to test stuff in tactical to make sure everything really does work.
+// You may want to be fancy and show stat preview when hovering over DRLs in the list of equippable items for the utility slot
+// To do that you'll have to get current UIArmory_Loadout from the screenstack or something like that. 
+// There's an example of that in (ugh) CanAddItemToInventory.
+
+// Other things to do:
+// CI/SO compat config.
+// MCM Support
 
 struct BackStruct
 {
@@ -21,6 +34,8 @@ struct BackStruct
 		HasSword=false
 	}
 };
+
+`include(WOTCDisposableLaunchers\Src\ModConfigMenuAPI\MCM_API_CfgHelpers.uci)
 
 /// <summary>
 /// This method is run when the player loads a saved game directly into Strategy while this DLC is installed
@@ -52,7 +67,7 @@ static event OnLoadedSavedGame()
 		if (ItemTemplate == none)
 			continue;
 
-		if (XComHQ.HasItemByName(ItemTemplate.CreatorTemplateName) || XComHQ.IsTechResearched(ItemTemplate.CreatorTemplateName))
+		if (ItemTemplate.StartingItem || XComHQ.HasItemByName(ItemTemplate.CreatorTemplateName) || XComHQ.IsTechResearched(ItemTemplate.CreatorTemplateName))
 		{	
 			ItemState = ItemTemplate.CreateInstanceFromTemplate(NewGameState);
 			XComHQ.PutItemInInventory(NewGameState, ItemState);
@@ -216,22 +231,30 @@ static function bool IsMeleeWeaponTemplate(X2WeaponTemplate WeaponTemplate)
 		default.BELT_CARRIED_MELEE_WEAPONS.Find(WeaponTemplate.DataName) == INDEX_NONE; // Musashi's combat knives are worn on belt, no reason to adjust DRL position for them
 }
 
-static function bool HasItem(name TemplateName, X2ItemTemplateManager ItemMgr, XComGameState_HeadquartersXCom OldXComHQState)
-{
-	local X2ItemTemplate ItemTemplate;
-
-	ItemTemplate = ItemMgr.FindItemTemplate(TemplateName);
-
-	return OldXComHQState.HasItem(ItemTemplate);
-}
-
 static function GetNumUtilitySlotsOverride(out int NumUtilitySlots, XComGameState_Item EquippedArmor, XComGameState_Unit UnitState, XComGameState CheckGameState)
 {
-	if (default.Utility_DRL_Occupies_Two_Slots && NumUtilitySlots > 1 && HasWeaponOfCategoryInSlot(UnitState, 'iri_disposable_launcher', eInvSlot_Utility, CheckGameState))
+	if (`GETMCMVAR(UTILITY_DRL_OCCUPIES_TWO_SLOTS) && NumUtilitySlots > 1 && HasWeaponOfCategoryInSlot(UnitState, 'iri_disposable_launcher', eInvSlot_Utility, CheckGameState))
 	{
 		// If you ever have some kind of inventory operation that fails to fix the stat, you can manually call ValidateLoadout (or just RealizeItemSlotsCount, CHL only) (c) robojumper
 		NumUtilitySlots--;
 	}
+}
+
+static final function bool HasItemOfCategoryInSlot(const XComGameState_Unit UnitState, const name ItemCat, const EInventorySlot Slot, optional XComGameState CheckGameState)
+{
+	local XComGameState_Item Item;
+	local StateObjectReference ItemRef;
+
+	foreach UnitState.InventoryItems(ItemRef)
+	{
+		Item = UnitState.GetItemGameState(ItemRef, CheckGameState);
+
+		if (Item != none && Item.InventorySlot == Slot && Item.GetMyTemplate().ItemCat == ItemCat)
+		{
+			return true;
+		}
+	}
+	return false;
 }
 
 static final function bool HasWeaponOfCategoryInSlot(const XComGameState_Unit UnitState, const name WeaponCat, const EInventorySlot Slot, optional XComGameState CheckGameState)
@@ -243,7 +266,7 @@ static final function bool HasWeaponOfCategoryInSlot(const XComGameState_Unit Un
 	{
 		Item = UnitState.GetItemGameState(ItemRef, CheckGameState);
 
-		if(Item != none && Item.GetWeaponCategory() == WeaponCat && Item.InventorySlot == Slot)
+		if (Item != none && Item.InventorySlot == Slot && Item.GetWeaponCategory() == WeaponCat)
 		{
 			return true;
 		}
@@ -370,4 +393,199 @@ static final function MergeDRLAmmo(XComGameState_Unit UnitState, XComGameState S
 	{
 		MainDRL.Ammo = MainDRL.GetClipSize() * MainDRL.MergedItemCount + BonusAmmo;
 	}
+}
+
+static function bool CanAddItemToInventory_CH_Improved(out int bCanAddItem, const EInventorySlot Slot, const X2ItemTemplate ItemTemplate, int Quantity, XComGameState_Unit UnitState, optional XComGameState CheckGameState, optional out string DisabledReason, optional XComGameState_Item ItemState)
+{
+	local X2WeaponTemplate		WeaponTemplate;
+	local XGParamTag            LocTag;
+	local bool					OverrideNormalBehavior;
+    local bool					DoNotOverrideNormalBehavior;
+	local array<XComGameState_Item> EquippedItems;
+	local XComGameState_Item	EquippedItem;
+	local int					SelectedSlotEquippedItemObjectID;
+	local int					NumUtilitySlots;
+
+	OverrideNormalBehavior = CheckGameState != none;
+    DoNotOverrideNormalBehavior = CheckGameState == none;   
+
+	//`LOG(UnitState.GetFullName() @ ItemTemplate.DataName @ ItemTemplate.ItemCat @ Slot @ `GETMCMVAR(UTILITY_DRL_MUTUALLY_EXCLUSIVE_WITH_GRENADES) @ "called by UI:" @ CheckGameState == none,, 'IRITEST');
+
+	WeaponTemplate = X2WeaponTemplate(ItemTemplate);
+	if (WeaponTemplate != none && WeaponTemplate.WeaponCat == 'iri_disposable_launcher')
+	{
+		// #1. Disallow equipping a DRL according to soldier class weapon restrictions.
+		// The DRL won't even show up for completely invalid units, like SPARKs, thanks to the ShowItemInLockerList event listener.
+		if (!IsWeaponAllowedByClassInSlot(UnitState.GetSoldierClassTemplate(), 'iri_disposable_launcher', Slot))
+		{
+			LocTag = XGParamTag(`XEXPANDCONTEXT.FindTag("XGParam"));
+			LocTag.StrValue0 = UnitState.GetSoldierClassTemplate().DisplayName;
+			DisabledReason = class'UIUtilities_Text'.static.CapsCheckForGermanScharfesS(`XEXPAND.ExpandString(class'UIArmory_Loadout'.default.m_strUnavailableToClass));
+			bCanAddItem = 0;
+			return OverrideNormalBehavior;
+		}
+
+		// Everything inside this statement is such an awful hack, I hate everything
+		if (Slot == eInvSlot_Utility)
+		{
+			// #1A - Disallow equipping DRL into utility slot if the soldier has fewer than two slots currently
+			if(`GETMCMVAR(UTILITY_DRL_OCCUPIES_TWO_SLOTS))
+			{
+				NumUtilitySlots = UnitState.GetCurrentStat(eStat_UtilityItems);
+				//`LOG(UnitState.GetFullName() @ Slot @ ItemTemplate.DataName @ `showvar(NumUtilitySlots),, 'IRITEST');
+				if (NumUtilitySlots < 2)
+				{
+					//`LOG("Soldier has fewer than 2 utility slots total, forbidding",, 'IRITEST');
+					DisabledReason = class'UIUtilities_Text'.static.CapsCheckForGermanScharfesS(default.DRL_Requires_Two_Utility_Slots);
+					bCanAddItem = 0;
+					return OverrideNormalBehavior;
+				}
+				else // #1B - Disallow equipping DRL into utility slot if the soldier doesn't have at least two free utility slots. 
+				{	 // Slot currently selected in the armory UI counts as free.
+					EquippedItems = UnitState.GetAllItemsInSlot(eInvSlot_Utility, CheckGameState,, true);
+					MaybeUpdateSelectedSlotEquippedItemObjectID(SelectedSlotEquippedItemObjectID);
+					//`LOG("Selected slot equipped item:" @ SelectedSlotEquippedItemObjectID @ "Items in utility slot:" @ EquippedItems.Length,, 'IRITEST');
+					foreach EquippedItems(EquippedItem)
+					{
+						`LOG("Item:" @ EquippedItem.GetMyTemplateName(),, 'IRITEST');
+
+						if (EquippedItem.ObjectID == SelectedSlotEquippedItemObjectID)
+						{
+							//`LOG("This item is equipped into utility slot we're looking at, skipping",, 'IRITEST');
+							continue;
+						}
+						NumUtilitySlots--;
+						//`LOG(`showvar(NumUtilitySlots),, 'IRITEST');
+						if (NumUtilitySlots < 2)
+						{
+							//`LOG("Soldier has fewer than 2 free utility slots, forbidding",, 'IRITEST');
+							DisabledReason = class'UIUtilities_Text'.static.CapsCheckForGermanScharfesS(default.DRL_Requires_Two_Utility_Slots);
+							bCanAddItem = 0;
+							return OverrideNormalBehavior;
+						}
+					}
+				}
+			}
+
+			if (`GETMCMVAR(UTILITY_DRL_MUTUALLY_EXCLUSIVE_WITH_GRENADES))
+			{
+				EquippedItems = UnitState.GetAllItemsInSlot(eInvSlot_Utility, CheckGameState,, true);
+				MaybeUpdateSelectedSlotEquippedItemObjectID(SelectedSlotEquippedItemObjectID);
+
+				// #2. Disallow equipping a DRL into a utility slot if the soldier has a DRL equipped into another utility slot.
+				// Check if the soldier has a DRL equipped in a utility slot other than the one we're currently selecting for.
+				foreach EquippedItems(EquippedItem)
+				{
+					if (EquippedItem.ObjectID == SelectedSlotEquippedItemObjectID)
+						continue;
+
+					if (EquippedItem.GetWeaponCategory() == 'iri_disposable_launcher')
+					{
+						LocTag = XGParamTag(`XEXPANDCONTEXT.FindTag("XGParam"));
+						LocTag.StrValue0 = class'XGLocalizedData'.default.UtilityCatGrenade;
+						DisabledReason = class'UIUtilities_Text'.static.CapsCheckForGermanScharfesS(`XEXPAND.ExpandString(class'UIArmory_Loadout'.default.m_strCategoryRestricted));
+						bCanAddItem = 0;
+						return OverrideNormalBehavior;
+					}
+				}
+
+				// #3. Disallow equipping a DRL into utility slot if the soldier has a grenade equipped in another utility slot.
+				// Check if the soldier has grenades equipped in any other slots.
+				// Since DRL weapon template is not actually mutually exclusive with anything, spoof the unique equip check with a dummy grenade template
+				if (!UnitState.RespectsUniqueRule(default.DummyGrenadeTemplate, eInvSlot_Utility, , SelectedSlotEquippedItemObjectID))
+				{
+					LocTag = XGParamTag(`XEXPANDCONTEXT.FindTag("XGParam"));
+					LocTag.StrValue0 = class'XGLocalizedData'.default.UtilityCatGrenade;
+					DisabledReason = class'UIUtilities_Text'.static.CapsCheckForGermanScharfesS(`XEXPAND.ExpandString(class'UIArmory_Loadout'.default.m_strCategoryRestricted));
+					return OverrideNormalBehavior;
+				}
+			}
+		}
+	} 
+	else if (Slot == eInvSlot_Utility && ItemTemplate.ItemCat == 'grenade' && `GETMCMVAR(UTILITY_DRL_MUTUALLY_EXCLUSIVE_WITH_GRENADES))
+	{
+		
+		// #4. Disallow equipping grenades into utility slots while the soldier has a DRL equipped in another utility slot.
+		// When attempting to equip a grenade into a utility slot
+
+		// Check if the soldier has a DRL equipped in a utility slot other than the one we're currently selecting for.
+		EquippedItems = UnitState.GetAllItemsInSlot(eInvSlot_Utility, CheckGameState,, true);
+		MaybeUpdateSelectedSlotEquippedItemObjectID(SelectedSlotEquippedItemObjectID);
+		//`LOG("Attempting to equip a grenade. Selected slot equipped item:" @ SelectedSlotEquippedItemObjectID @ "Items in utility slot:" @ EquippedItems.Length,, 'IRITEST');
+		foreach EquippedItems(EquippedItem)
+		{
+			//`LOG("Item:" @ EquippedItem.GetMyTemplateName(),, 'IRITEST');
+
+			if (EquippedItem.ObjectID == SelectedSlotEquippedItemObjectID)
+			{
+				//`LOG("This item is equipped into utility slot we're looking at, skipping",, 'IRITEST');
+				continue;
+			}
+
+			if (EquippedItem.GetWeaponCategory() == 'iri_disposable_launcher')
+			{
+				//`LOG("Unit already has a DRL equipped in another utility slot, disallowing",, 'IRITEST');
+				LocTag = XGParamTag(`XEXPANDCONTEXT.FindTag("XGParam"));
+				LocTag.StrValue0 = ItemTemplate.GetLocalizedCategory();
+				DisabledReason = class'UIUtilities_Text'.static.CapsCheckForGermanScharfesS(`XEXPAND.ExpandString(class'UIArmory_Loadout'.default.m_strCategoryRestricted));
+				bCanAddItem = 0;
+				return OverrideNormalBehavior;
+			}
+		}
+	}
+
+	return DoNotOverrideNormalBehavior;
+}
+
+static final function MaybeUpdateSelectedSlotEquippedItemObjectID(out int SelectedSlotEquippedItemObjectID)
+{
+	local UIArmory_Loadout		Loadout;
+	local UIArmory_LoadoutItem	LoadoutItem;
+
+	if (SelectedSlotEquippedItemObjectID != 0)
+		return;
+
+	Loadout = UIArmory_Loadout(`SCREENSTACK.GetScreen(class'UIArmory_Loadout'));
+	if (Loadout != none && Loadout.EquippedList != none)
+	{
+		LoadoutItem = UIArmory_LoadoutItem(Loadout.EquippedList.GetSelectedItem());
+		if (LoadoutItem != none)
+		{
+			SelectedSlotEquippedItemObjectID = LoadoutItem.ItemRef.ObjectID;
+		}
+	}
+}
+
+static final function bool IsWeaponAllowedByClassInSlot(const X2SoldierClassTemplate ClassTemplate, const name WeaponCat, const EInventorySlot Slot)
+{
+	local SoldierClassWeaponType WeaponType;
+
+	switch (Slot)
+	{
+	case eInvSlot_SecondaryWeapon:
+	case eInvSlot_PrimaryWeapon:
+		break;
+	default:
+		return true;
+	}
+
+	if (ClassTemplate == none)
+		return false;
+    
+	foreach ClassTemplate.AllowedWeapons(WeaponType)
+	{
+		if (WeaponType.WeaponType == WeaponCat && WeaponType.SlotType == Slot)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+
+defaultproperties
+{
+	Begin Object Class=X2GrenadeTemplate Name=DefaultGrenadeTemplate
+	End Object
+	DummyGrenadeTemplate = DefaultGrenadeTemplate;
 }

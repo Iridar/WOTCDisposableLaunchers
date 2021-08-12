@@ -19,7 +19,7 @@ struct PenaltyStateStruct
 	var array<PenaltyStruct> Penalties;
 };
 var config array<PenaltyStruct> Penalties;
-var config bool MOBILITY_PENALTY_IS_APPLIED_TO_HEAVY_ARMOR;
+//var config bool MOBILITY_PENALTY_IS_APPLIED_TO_HEAVY_ARMOR;
 
  /*
 struct native StatChange
@@ -89,6 +89,34 @@ enum ECharStatType
 };
 */
 
+static final function array<PenaltyStruct> GetPenaltiesForItemState(XComGameState_Item ItemState, optional EInventorySlot OverrideSlot = -1)
+{
+	local array<PenaltyStruct> ReturnArray;
+	local PenaltyStruct	Penalty;
+
+	if (OverrideSlot != -1)
+	{
+		foreach default.Penalties(Penalty)
+		{
+			if ((Penalty.Slot == OverrideSlot || Penalty.Slot == eInvSlot_Unknown) && (Penalty.Template == ItemState.GetMyTemplateName() || Penalty.Template == ''))
+			{
+				ReturnArray.AddItem(Penalty);
+			}
+		}
+	}
+	else
+	{
+		foreach default.Penalties(Penalty)
+		{
+			if ((Penalty.Slot == ItemState.InventorySlot || Penalty.Slot == eInvSlot_Unknown) && (Penalty.Template == ItemState.GetMyTemplateName() || Penalty.Template == ''))
+			{
+				ReturnArray.AddItem(Penalty);
+			}
+		}
+	}
+	return ReturnArray;
+}
+
 simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState)
 {
 	local StatChange					NewStatChange;
@@ -118,31 +146,16 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 			// DRLs that had ammo, but have expended it, are of no interest to us.
 			ItemState = XComGameState_Item(History.GetGameStateForObjectID(ItemRef.ObjectID));
 			if (ItemState.GetWeaponCategory() == 'iri_disposable_launcher' && (ItemState.bMergedOut || ItemState.Ammo > 0))
-			{
+			{	
+				//`LOG("DRL:" @ ItemState.InventorySlot,, 'IRITEST');
+
 				PenaltyState.ItemState = ItemState;
-				PenaltyState.Penalties.Length = 0;
 
 				// Calculate total ammount of remaining rockets.
 				CurrentAmmo += ItemState.Ammo;
 
-				//`LOG("DRL:" @ ItemState.InventorySlot,, 'IRITEST');
-
 				// For each DRL Item State, store an array of penalties that should be applied for carriyng it.
-				foreach default.Penalties(Penalty)
-				{
-					if ((Penalty.Slot == ItemState.InventorySlot || Penalty.Slot == eInvSlot_Unknown) && (Penalty.Template == ItemState.GetMyTemplateName() || Penalty.Template == ''))
-					{
-						//foreach Penalty.StatChanges(NewStatChange)
-						//{	
-						//	if (NewStatChange.StatAmount != 0)
-						//	{
-						//		`LOG("-- Has penalty:" @ NewStatChange.StatType @ NewStatChange.StatAmount,, 'IRITEST');
-						//	}
-						//}
-
-						PenaltyState.Penalties.AddItem(Penalty);
-					}
-				}
+				PenaltyState.Penalties = GetPenaltiesForItemState(ItemState);
 
 				// Filter out any DRLs that don't apply any penalties.
 				if (PenaltyState.Penalties.Length > 0)

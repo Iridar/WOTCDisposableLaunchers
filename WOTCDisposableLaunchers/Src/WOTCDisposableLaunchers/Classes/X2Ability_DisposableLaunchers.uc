@@ -4,6 +4,8 @@ var config int RPG_ACTION_POINT_COST;
 var config bool RPG_ACTION_POINT_ENDS_TURN;
 var config array<name> RPG_NON_TURN_ENDING_ABILITIES;
 
+`include(WOTCDisposableLaunchers\Src\ModConfigMenuAPI\MCM_API_CfgHelpers.uci)
+
 static function array<X2DataTemplate> CreateTemplates()
 {
 	local array<X2DataTemplate> Templates;
@@ -105,7 +107,7 @@ static function X2AbilityTemplate IRI_PenaltyRPG()
 
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
 
-	if (!class'X2Effect_DRL_Penalty'.default.MOBILITY_PENALTY_IS_APPLIED_TO_HEAVY_ARMOR)
+	if (`GETMCMVAR(DRL_STAT_PENALTIES_APPLIED_TO_HEAVY_ARMOR))
 	{
 		//	don't apply penalty to heavy armor
 		Template.AbilityShooterConditions.AddItem(new class'X2Condition_HeavyArmor');

@@ -33,6 +33,9 @@ tags= war of the chosen, item, weapon</Description>
     <Content Include="Config\Base\XComTemplateCreator.ini">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Config\Base\XComWOTCDisposableLaunchers_DEFAULT.ini">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Config\Compatibility\XComScatter.ini">
       <SubType>Content</SubType>
     </Content>
@@ -82,6 +85,57 @@ tags= war of the chosen, item, weapon</Description>
       <SubType>Content</SubType>
     </Content>
     <Content Include="ReadMe.txt" />
+    <Content Include="Src\ModConfigMenuAPI\Classes\MCM_API.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\ModConfigMenuAPI\Classes\MCM_API_Button.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\ModConfigMenuAPI\Classes\MCM_API_Checkbox.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\ModConfigMenuAPI\Classes\MCM_API_Dropdown.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\ModConfigMenuAPI\Classes\MCM_API_Instance.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\ModConfigMenuAPI\Classes\MCM_API_Label.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\ModConfigMenuAPI\Classes\MCM_API_Setting.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\ModConfigMenuAPI\Classes\MCM_API_SettingsGroup.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\ModConfigMenuAPI\Classes\MCM_API_SettingsPage.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\ModConfigMenuAPI\Classes\MCM_API_Slider.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\ModConfigMenuAPI\Classes\MCM_API_Spinner.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\ModConfigMenuAPI\Classes\MCM_OptionsScreen.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\ModConfigMenuAPI\MCM_API_CfgHelpers.uci">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\ModConfigMenuAPI\MCM_API_Includes.uci">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\WOTCDisposableLaunchers\Classes\DRL_MCM_Defaults.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\WOTCDisposableLaunchers\Classes\DRL_MCM_Screen.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\WOTCDisposableLaunchers\Classes\DRL_MCM_ScreenListener.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\WOTCDisposableLaunchers\Classes\X2Ability_DisposableLaunchers.uc">
       <SubType>Content</SubType>
     </Content>
@@ -103,6 +157,9 @@ tags= war of the chosen, item, weapon</Description>
     <Content Include="Src\WOTCDisposableLaunchers\Classes\X2EventListener_DRL.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\WOTCDisposableLaunchers\Classes\XComGameState_Item_DRL.uc">
+      <SubType>Content</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Config" />
@@ -111,6 +168,8 @@ tags= war of the chosen, item, weapon</Description>
     <Folder Include="Content" />
     <Folder Include="Localization" />
     <Folder Include="Src" />
+    <Folder Include="Src\ModConfigMenuAPI" />
+    <Folder Include="Src\ModConfigMenuAPI\Classes" />
     <Folder Include="Src\WOTCDisposableLaunchers" />
     <Folder Include="Src\WOTCDisposableLaunchers\Classes" />
   </ItemGroup>
