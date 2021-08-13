@@ -107,12 +107,9 @@ static function X2AbilityTemplate IRI_PenaltyRPG()
 
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
 
-	if (`GETMCMVAR(DRL_STAT_PENALTIES_APPLIED_TO_HEAVY_ARMOR))
-	{
-		//	don't apply penalty to heavy armor
-		Template.AbilityShooterConditions.AddItem(new class'X2Condition_HeavyArmor');
-	}
-
+	//	don't apply penalty to heavy armor
+	Template.AbilityShooterConditions.AddItem(new class'X2Condition_HeavyArmor');
+	
 	Template.AbilityToHitCalc = default.DeadEye;
 	Template.AbilityTargetStyle = default.SelfTarget;
 

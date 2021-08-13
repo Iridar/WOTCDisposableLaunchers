@@ -6,7 +6,6 @@ strMaxScatter="\nMax Scatter (Tiles): "
 
 [X2DownloadableContentInfo_WOTCDisposableLaunchers]
 DRL_WeaponCategory = "Disposable Launcher"
-DRL_Category="DISPOSABLE LAUNCHER"
 DRL_Not_Allowed_With_Grenades_Message="UTILITY SLOT DISPOSABLE LAUNCHER MUTUALLY EXCLUSIVE WITH GRENADES"
 DRL_Requires_Two_Utility_Slots="DISPOSABLE LAUNCHER REQUIRES TWO UTILITY SLOTS"
 
@@ -42,10 +41,13 @@ ModName="Disposable Launchers"
 PageTitle="Disposable Rocket Launchers 3.0"
 GroupHeader="General Settings"
 
+DRL_STAT_PENALTIES_ENABLED_Label = "Enable DRL Stat Penalties"
+DRL_STAT_PENALTIES_ENABLED_Tips = "If enabled, carrying Disposable Rocket Launchers will apply stat penalties to soldiers. By default, the stat penalties are applied for carrying a DRL in a Utility Slot. Penalties can be reconfigured in this mod's configuration files."
+
 DRL_STAT_PENALTIES_APPLIED_TO_HEAVY_ARMOR_Label = "DRL Stat Penalties apply to Heavy Armor"
 DRL_STAT_PENALTIES_APPLIED_TO_HEAVY_ARMOR_Tips = "If enabled, stat penalties for carrying Disposable Rocket Launchers in the Utility Slot will apply even if the soldier wears Heavy Armor, like E.X.O. or W.A.R. Suit. Changing this setting requires a game restart to take effect."
 
-UTILITY_DRL_OCCUPIES_TWO_SLOTS_Label = "DRL Occupies two Utility Slots"
+UTILITY_DRL_OCCUPIES_TWO_SLOTS_Label = "Utility Slot DRL Occupies two slots"
 UTILITY_DRL_OCCUPIES_TWO_SLOTS_Tips = "If enabled, equipping a DRL into a Utility Slot will remove one Utility Slot from the soldier."
 
 UTILITY_DRL_MUTUALLY_EXCLUSIVE_WITH_GRENADES_Label = "Utility Slot DRL mutually exclusive with Grenades"

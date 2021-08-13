@@ -1,6 +1,6 @@
 class X2EventListener_DRL extends X2EventListener config(DisposableLaunchers);
 
-var config array<EInventorySlot> AllowedDRLInventorySlots;
+`include(WOTCDisposableLaunchers\Src\ModConfigMenuAPI\MCM_API_CfgHelpers.uci)
 
 static function array<X2DataTemplate> CreateTemplates()
 {
@@ -72,6 +72,7 @@ static function EventListenerReturn OnOverrideShowItemInLockerList(Object EventD
     local XComLWTuple Tuple;
     local EInventorySlot Slot;
     local XComGameState_Unit UnitState;
+	local array<EInventorySlot> AllowedSlots;
 
     ItemState = XComGameState_Item(EventSource);
     Tuple = XComLWTuple(EventData);
@@ -86,11 +87,10 @@ static function EventListenerReturn OnOverrideShowItemInLockerList(Object EventD
 		return ELR_NoInterrupt;
 	}
 
+	AllowedSlots = `GETMCMVAR(DRL_ALLOWED_INVENTORY_SLOTS);
     Slot = EInventorySlot(Tuple.Data[1].i);
-	if (default.AllowedDRLInventorySlots.Find(Slot) != INDEX_NONE) // Is Slot Valid for DRL
-	{
-		Tuple.Data[0].b = true;
-	}
+	Tuple.Data[0].b = AllowedSlots.Find(Slot) != INDEX_NONE;
+	
     return ELR_NoInterrupt;
 }
 

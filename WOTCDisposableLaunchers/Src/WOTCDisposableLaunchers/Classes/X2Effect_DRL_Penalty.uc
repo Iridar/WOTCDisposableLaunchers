@@ -19,80 +19,16 @@ struct PenaltyStateStruct
 	var array<PenaltyStruct> Penalties;
 };
 var config array<PenaltyStruct> Penalties;
-//var config bool MOBILITY_PENALTY_IS_APPLIED_TO_HEAVY_ARMOR;
 
- /*
-struct native StatChange
-{
-	var ECharStatType   StatType;
-	var float           StatAmount;
-	var EStatModOp		ModOp;
-	var ECharStatModApplicationRule ApplicationRule;
-
-	structdefaultproperties
-	{
-		ApplicationRule=ECSMAR_Additive
-	}
-};
-struct native StatChange
-{
-	var ECharStatType   StatType;
-	var float           StatAmount;
-	var EStatModOp		ModOp;
-	var ECharStatModApplicationRule ApplicationRule;
-
-	structdefaultproperties
-	{
-		ApplicationRule=ECSMAR_Additive
-	}
-};
-
-// Current order of opperations - MODOP_Multiplication, MODOP_Addition, MODOP_PostMultiplication
-enum EStatModOp
-{
-	MODOP_Addition,
-	MODOP_Multiplication,   // Pre-multiplication - This is in the base game and so stays the same name.
-	MODOP_PostMultiplication,
-};
-
-enum ECharStatType
-{
-	eStat_Invalid,
-	eStat_UtilityItems,
-	eStat_HP,
-	eStat_Offense,
-	eStat_Defense,
-	eStat_Mobility,
-	eStat_Will,
-	eStat_Hacking,              // Used in calculating chance of success for hacking attempts.
-	eStat_SightRadius,
-	eStat_FlightFuel,
-	eStat_AlertLevel,
-	eStat_BackpackSize,
-	eStat_Dodge,
-	eStat_ArmorChance,          //  DEPRECATED - armor will always be used regardless of this value
-	eStat_ArmorMitigation,      
-	eStat_ArmorPiercing,
-	eStat_PsiOffense,
-	eStat_HackDefense,          // Units use this when defending against hacking attempts.
-	eStat_DetectionRadius,		// The radius at which this unit will detect other concealed units.								Overall Detection Range = 
-	eStat_DetectionModifier,	// The modifier this unit will apply to the range at which other units can detect this unit.	Detector.DetectionRadius * (1.0 - Detectee.DetectionModifier)
-	eStat_CritChance,
-	eStat_Strength,
-	eStat_SeeMovement,
-	eStat_HearingRadius,
-	eStat_CombatSims,
-	eStat_FlankingCritChance,
-	eStat_ShieldHP,
-	eStat_Job,
-	eStat_FlankingAimBonus,
-};
-*/
+`include(WOTCDisposableLaunchers\Src\ModConfigMenuAPI\MCM_API_CfgHelpers.uci)
 
 static final function array<PenaltyStruct> GetPenaltiesForItemState(XComGameState_Item ItemState, optional EInventorySlot OverrideSlot = -1)
 {
 	local array<PenaltyStruct> ReturnArray;
 	local PenaltyStruct	Penalty;
+
+	if (!`GETMCMVAR(DRL_STAT_PENALTIES_ENABLED))
+		return ReturnArray;
 
 	if (OverrideSlot != -1)
 	{

@@ -22,6 +22,8 @@ function XComGameState_Item CreateInstanceFromTemplate(XComGameState NewGameStat
 	return Item;
 }
 
+`include(WOTCDisposableLaunchers\Src\ModConfigMenuAPI\MCM_API_CfgHelpers.uci)
+
 function int GetUIStatMarkup(ECharStatType Stat, optional XComGameState_Item Weapon)
 {
 	local array<PenaltyStruct>	Penalties;
@@ -33,7 +35,7 @@ function int GetUIStatMarkup(ECharStatType Stat, optional XComGameState_Item Wea
 	//`LOG(GetFuncName() @ Weapon != none @ Weapon.GetMyTemplateName() @ Weapon.InventorySlot,, 'IRITEST');
 
 	Markup = super.GetUIStatMarkup(Stat);
-	if (Weapon != none)
+	if (Weapon != none && `GETMCMVAR(DRL_STAT_PENALTIES_ENABLED))
 	{
 		// If this function is called when previewing a DRL in the armory locker list,
 		// get the penalties for the slot we're about to equip the DRL into.
