@@ -251,7 +251,6 @@ static final function int GetNumWeaponOfCategoryInSlot(const XComGameState_Unit 
 {
 	local array<XComGameState_Item>	Items;
 	local XComGameState_Item		Item;
-	local StateObjectReference		ItemRef;
 	local int NumItems;
 
 	Items = UnitState.GetAllItemsInSlot(Slot, CheckGameState,, true);
