@@ -3,18 +3,16 @@ class X2DownloadableContentInfo_WOTCDisposableLaunchers extends X2DownloadableCo
 var localized string DRL_WeaponCategory;
 var localized string DRL_Requires_Two_Utility_Slots;
 
-//var config(DisposableLaunchers) bool Utility_DRL_Occupies_Two_Slots;
-//var config(DisposableLaunchers) bool Utility_DRL_Mutually_Exclusive_With_Grenades;
 var config(DisposableLaunchers) array<name> BELT_CARRIED_MELEE_WEAPONS;
 
 var config(TemplateCreator) array<name> AddItemsToHQInventory;
 
 var private X2GrenadeTemplate DummyGrenadeTemplate;
 
-// Other things to do:
-// Gameplay tests
-// Russian loc?
-// Spring cleaning
+// TODO
+// Russian loc
+// New ability icon
+// AT-4 jank (no blowback, projectile trail disappears as soon as projectile hits)
 
 struct BackStruct
 {
@@ -225,10 +223,10 @@ static function bool IsMeleeWeaponTemplate(X2WeaponTemplate WeaponTemplate)
 
 static function GetNumUtilitySlotsOverride(out int NumUtilitySlots, XComGameState_Item EquippedArmor, XComGameState_Unit UnitState, XComGameState CheckGameState)
 {
-	if (`GETMCMVAR(UTILITY_DRL_OCCUPIES_TWO_SLOTS) && NumUtilitySlots > 1 && HasWeaponOfCategoryInSlot(UnitState, 'iri_disposable_launcher', eInvSlot_Utility, CheckGameState))
+	if (`GETMCMVAR(UTILITY_DRL_OCCUPIES_TWO_SLOTS) && NumUtilitySlots > 1)
 	{
 		// If you ever have some kind of inventory operation that fails to fix the stat, you can manually call ValidateLoadout (or just RealizeItemSlotsCount, CHL only) (c) robojumper
-		NumUtilitySlots--;
+		NumUtilitySlots -= GetNumWeaponOfCategoryInSlot(UnitState, 'iri_disposable_launcher', eInvSlot_Utility, CheckGameState);
 	}
 }
 
@@ -249,21 +247,23 @@ static final function bool HasItemOfCategoryInSlot(const XComGameState_Unit Unit
 	return false;
 }
 
-static final function bool HasWeaponOfCategoryInSlot(const XComGameState_Unit UnitState, const name WeaponCat, const EInventorySlot Slot, optional XComGameState CheckGameState)
+static final function int GetNumWeaponOfCategoryInSlot(const XComGameState_Unit UnitState, const name WeaponCat, const EInventorySlot Slot, optional XComGameState CheckGameState)
 {
-	local XComGameState_Item Item;
-	local StateObjectReference ItemRef;
+	local array<XComGameState_Item>	Items;
+	local XComGameState_Item		Item;
+	local StateObjectReference		ItemRef;
+	local int NumItems;
 
-	foreach UnitState.InventoryItems(ItemRef)
+	Items = UnitState.GetAllItemsInSlot(Slot, CheckGameState,, true);
+
+	foreach Items(Item)
 	{
-		Item = UnitState.GetItemGameState(ItemRef, CheckGameState);
-
-		if (Item != none && Item.InventorySlot == Slot && Item.GetWeaponCategory() == WeaponCat)
+		if (Item.InventorySlot == Slot && Item.GetWeaponCategory() == WeaponCat)
 		{
-			return true;
+			NumItems++;
 		}
 	}
-	return false;
+	return NumItems;
 }
 
 static final function bool HasWeaponOfCategoryInSlotOtherThan(const XComGameState_Unit UnitState, const name WeaponCat, const EInventorySlot Slot, optional XComGameState CheckGameState)
