@@ -5,6 +5,7 @@ var config int VERSION_CFG;
 var localized string ModName;
 var localized string PageTitle;
 var localized string GroupHeader;
+var localized string GroupHeader2;
 
 `include(WOTCDisposableLaunchers\Src\ModConfigMenuAPI\MCM_API_Includes.uci)
 
@@ -52,7 +53,7 @@ simulated function ClientModCallback(MCM_API_Instance ConfigAPI, int GameMode)
 	`MCM_API_AutoAddCheckBox(Group, UTILITY_DRL_OCCUPIES_TWO_SLOTS);	
 	`MCM_API_AutoAddCheckBox(Group, UTILITY_DRL_MUTUALLY_EXCLUSIVE_WITH_GRENADES);	
 
-	Group = Page.AddGroup('Group_2', "Allowed Inventory Slots");
+	Group = Page.AddGroup('Group_2', GroupHeader2);
 
 	for (i = eInvSlot_Unknown + 1; i < eInvSlot_END_TEMPLATED_SLOTS; i++)
 	{

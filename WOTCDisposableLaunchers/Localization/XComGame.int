@@ -1,7 +1,7 @@
 [IRI_PenaltyRPG X2AbilityTemplate]
-LocFriendlyName="Munitions"
-LocLongDescription="Carrying heavy ordnance in Utility Slot is slowing down this soldier, and makes them easier to detect in concealment. Disposing of the heavy ordnance will remove the penalty."
-LocHelpText="Carrying heavy ordnance in Utility Slot is slowing down this soldier, and makes them easier to detect in concealment. Disposing of the heavy ordnance will remove the penalty."
+LocFriendlyName="Disposable Launcher Penalty"
+LocLongDescription="Carrying a Disposable Rocket Launcher in Utility Slot is slowing down this unit, and makes them easier to detect in concealment. Disposing of the Launcher will remove the penalty."
+LocHelpText="Carrying a Disposable Rocket Launcher in Utility Slot is slowing down this unit, and makes them easier to detect in concealment. Disposing of the Launcher will remove the penalty."
 
 [IRI_FireRPG X2AbilityTemplate]
 LocFriendlyName="Fire Disposable Launcher"

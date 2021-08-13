@@ -1,37 +1,30 @@
-[UIUtilities_DRL]
-m_sAverageScatterText="± <XGParam:StrValue0/> Tiles"
-
-[X2TargetingMethod_DisposableLauncher]
-strMaxScatter="\nMax Scatter (Tiles): "
-
 [X2DownloadableContentInfo_WOTCDisposableLaunchers]
 DRL_WeaponCategory = "Disposable Launcher"
-DRL_Not_Allowed_With_Grenades_Message="UTILITY SLOT DISPOSABLE LAUNCHER MUTUALLY EXCLUSIVE WITH GRENADES"
 DRL_Requires_Two_Utility_Slots="DISPOSABLE LAUNCHER REQUIRES TWO UTILITY SLOTS"
 
 [IRI_DRL_CV X2DisposableLauncherTemplate]
 FriendlyName="RPG"
 FriendlyNamePlural="RPGs"
 ThrownAbilityName="Fire RPG"
-ThrownAbilityHelpText="Fire the RPG. The shot can scatter."
+ThrownAbilityHelpText="Fire the RPG."
 BriefSummary="We managed to secure a large supply of these single use RPGs from one of the munitions depots leftover from the original XCOM project. They are highly effective against armored targets and groups of enemies, but can be unwieldy to use."
-TacticalText="We managed to secure a large supply of these single use RPGs from one of the munitions depots leftover from the original XCOM project. They are highly effective against armored targets and groups of enemies, but can be unwieldy to use. <br/><Bullet/> Unlike grenades, rockets can scatter and miss their target. Scatter gets worse if the rocket is fired while the soldier has only one action remaining or when taking long-distance shots. \n<Bullet/> Carrying an RPG in Utility Slot incurs Mobility and Detection Radius penalties until all rockets are spent. \n<Bullet/> Heavy Armor users do not suffer the penalties."
+TacticalText="We managed to secure a large supply of these single use RPGs from one of the munitions depots leftover from the original XCOM project. They are highly effective against armored targets and groups of enemies, but can be unwieldy to use."
 
 [IRI_DRL_MG X2DisposableLauncherTemplate]
 FriendlyName="CRAG"
 FriendlyNamePlural="CRAGs"
 ThrownAbilityName="Fire CRAG"
-ThrownAbilityHelpText="Fire the CRAG. The shot can scatter."
+ThrownAbilityHelpText="Fire the CRAG."
 BriefSummary="CRAG uses overclocked magnetic coils to rapidly accelerate a modified Alien Grenade, launching it at supersonic speeds. Unfortunately, without a heavy and bulky compensation and cooling unit, the coil lining invariably fries during the shot, making this launcher unfit for reuse."
-TacticalText="CRAG uses overclocked magnetic coils to rapidly accelerate a modified Alien Grenade, launching it at supersonic speeds. Unfortunately, without a heavy and bulky compensation and cooling unit, the coil lining invariably fries during the shot, making this launcher unfit for reuse. <br/><Bullet/> Unlike grenades, rockets can scatter and miss their target. Scatter gets worse if the rocket is fired while the soldier has only one action remaining or when taking long-distance shots. \n<Bullet/> Carrying a CRAG in Utility Slot incurs Mobility and Detection Radius penalties until all rockets are spent. \n<Bullet/> Heavy Armor users do not suffer the penalties."
+TacticalText="CRAG uses overclocked magnetic coils to rapidly accelerate a modified Alien Grenade, launching it at supersonic speeds. Unfortunately, without a heavy and bulky compensation and cooling unit, the coil lining invariably fries during the shot, making this launcher unfit for reuse."
 
 [IRI_DRL_BM X2DisposableLauncherTemplate]
 FriendlyName="BFG"
 FriendlyNamePlural="BFGs"
 ThrownAbilityName="Fire BFG"
-ThrownAbilityHelpText="Fire the BFG. The shot can scatter."
-BriefSummary="Binary Fusion Grenade uses a conventional explosive charge to implode an Elerium Core, giving it a significant potential as an explosive. BFG uses condensed atmosphere air to supercool the Core to delay the chain reaction. The core is then immediately launched via no-contact gravitation fields."
-TacticalText="Binary Fusion Grenade uses a conventional explosive charge to implode an Elerium Core, giving it a significant potential as an explosive. BFG uses condensed atmosphere air to supercool the Core to delay the chain reaction. The core is then immediately launched via no-contact gravitation fields. <br/><Bullet/> Unlike grenades, rockets can scatter and miss their target. Scatter gets worse if the rocket is fired while the soldier has only one action remaining or when taking long-distance shots. \n<Bullet/> Carrying a BFG in Utility Slot incurs Mobility and Detection Radius penalties until all rockets are spent. \n<Bullet/> Heavy Armor users do not suffer the penalties."
+ThrownAbilityHelpText="Fire the BFG."
+BriefSummary="Binary Fusion Grenade uses a conventional explosive charge to implode an Elerium Core, giving it a significant potential as an explosive. BFG uses condensed atmosphere air to supercool the Core to delay the chain reaction. The core is then immediately launched via no-contact magnetic fields."
+TacticalText="Binary Fusion Grenade uses a conventional explosive charge to implode an Elerium Core, giving it a significant potential as an explosive. BFG uses condensed atmosphere air to supercool the Core to delay the chain reaction. The core is then immediately launched via no-contact magnetic fields."
 
 [XComGameState_Item_DRL]
 strDetectionModifier = "DETECTION RADIUS INCREASE"
@@ -40,15 +33,16 @@ strDetectionModifier = "DETECTION RADIUS INCREASE"
 ModName="Disposable Launchers"
 PageTitle="Disposable Rocket Launchers 3.0"
 GroupHeader="General Settings"
+GroupHeader2="Allowed Inventory Slots"
 
 DRL_STAT_PENALTIES_ENABLED_Label = "Enable DRL Stat Penalties"
-DRL_STAT_PENALTIES_ENABLED_Tips = "If enabled, carrying Disposable Rocket Launchers will apply stat penalties to soldiers. By default, the stat penalties are applied for carrying a DRL in a Utility Slot. Penalties can be reconfigured in this mod's configuration files."
+DRL_STAT_PENALTIES_ENABLED_Tips = "If enabled, carrying Disposable Rocket Launchers will apply stat penalties to soldiers. By default, the stat penalties are applied only for carrying a DRL in a Utility Slot. Penalties can be reconfigured in this mod's configuration files."
 
 DRL_STAT_PENALTIES_APPLIED_TO_HEAVY_ARMOR_Label = "DRL Stat Penalties apply to Heavy Armor"
-DRL_STAT_PENALTIES_APPLIED_TO_HEAVY_ARMOR_Tips = "If enabled, stat penalties for carrying Disposable Rocket Launchers in the Utility Slot will apply even if the soldier wears Heavy Armor, like E.X.O. or W.A.R. Suit. Changing this setting requires a game restart to take effect."
+DRL_STAT_PENALTIES_APPLIED_TO_HEAVY_ARMOR_Tips = "If enabled, stat penalties for carrying Disposable Rocket Launchers will apply even if the soldier wears Heavy Armor, like E.X.O. or W.A.R. Suit."
 
 UTILITY_DRL_OCCUPIES_TWO_SLOTS_Label = "Utility Slot DRL Occupies two slots"
-UTILITY_DRL_OCCUPIES_TWO_SLOTS_Tips = "If enabled, equipping a DRL into a Utility Slot will remove one Utility Slot from the soldier."
+UTILITY_DRL_OCCUPIES_TWO_SLOTS_Tips = "If enabled, equipping a DRL into a Utility Slot will remove one Utility Slot from the soldier, and the soldier will be able to equip a DRL into a Utility Slot only if they have at least two Utility Slots available."
 
 UTILITY_DRL_MUTUALLY_EXCLUSIVE_WITH_GRENADES_Label = "Utility Slot DRL mutually exclusive with Grenades"
 UTILITY_DRL_MUTUALLY_EXCLUSIVE_WITH_GRENADES_Tips = "If enabled, soldiers will be unable to equip a DRL into a Utility Slot while having an offensive grenade in another Utility Slot, and vice versa."
