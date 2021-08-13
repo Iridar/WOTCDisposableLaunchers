@@ -80,7 +80,7 @@ simulated final function bool IsSlotEnabled(int i)
 {
 	local EInventorySlot CheckSlot;
 
-	`LOG(GetFuncName() @ i @ EInventorySlot(i) @ DRL_ALLOWED_INVENTORY_SLOTS.Find(CheckSlot) != INDEX_NONE @ DRL_ALLOWED_INVENTORY_SLOTS.Length,, 'IRITEST');
+	//`LOG(GetFuncName() @ i @ EInventorySlot(i) @ DRL_ALLOWED_INVENTORY_SLOTS.Find(CheckSlot) != INDEX_NONE @ DRL_ALLOWED_INVENTORY_SLOTS.Length,, 'IRITEST');
 
 	CheckSlot = EInventorySlot(i);
 
