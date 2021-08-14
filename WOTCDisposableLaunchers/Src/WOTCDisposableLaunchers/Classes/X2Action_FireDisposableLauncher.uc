@@ -9,12 +9,8 @@ function Init()
 	SourceWeapon = XComGameState_Item(`XCOMHISTORY.GetGameStateForObjectID(AbilityContext.InputContext.ItemObject.ObjectID));
 
 	//	Note: the weapon's ammo will be examined *after* the ability ammo cost is paid.
-	if (SourceWeapon != none && SourceWeapon.Ammo > 0) 
+	if (SourceWeapon != none && SourceWeapon.Ammo == 0) 
 	{
-		AnimParams.AnimName = 'FF_FirePutBack';
-	}
-	else
-	{
-		AnimParams.AnimName = 'FF_Fire';
+		AnimParams.AnimName = 'FF_FireDrop';
 	}
 }

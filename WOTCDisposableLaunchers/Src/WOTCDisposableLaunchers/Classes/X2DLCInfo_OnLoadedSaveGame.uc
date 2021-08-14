@@ -38,8 +38,11 @@ static final function RemoveLooseDRLs()
 	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Remove Loose DRLs");
 	foreach History.IterateByClassType(class'XComGameState_Item', ItemState)
 	{
-		NewGameState.RemoveStateObject(ItemState.ObjectID);
-		bChange = true;
+		if (IsOldDRLItem(ItemState.GetMyTemplateName()))
+		{
+			NewGameState.RemoveStateObject(ItemState.ObjectID);
+			bChange = true;
+		}
 	}
 	if (bChange)
 	{
@@ -476,4 +479,36 @@ static final function XComGameState_Item MaybeGetReplacementItemState(XComGameSt
 		NewItemState.MergedItemCount = ItemState.MergedItemCount;
 	}
 	return NewItemState;
+}
+
+static final function bool IsOldDRLItem(const name TemplateName)
+{
+	switch (TemplateName)
+	{
+	// 2.0 version
+	case 'IRI_DRL_CV_Utility':
+	case 'IRI_DRL_CV_Secondary':
+	case 'IRI_DRL_CV_Heavy':
+	case 'IRI_DRL_MG_Utility':
+	case 'IRI_DRL_MG_Secondary':
+	case 'IRI_DRL_MG_Heavy':
+	case 'IRI_DRL_BM_Utility':
+	case 'IRI_DRL_BM_Secondary':
+	case 'IRI_DRL_BM_Heavy':
+	case 'IRI_RPG_CV_Utility':
+	case 'IRI_RPG_CV_Secondary':
+	case 'IRI_RPG_CV_Heavy':
+	case 'IRI_RPG_MG_Utility':
+	case 'IRI_RPG_MG_Secondary':
+	case 'IRI_RPG_MG_Heavy':
+	case 'IRI_RPG_BM_Utility':
+	case 'IRI_RPG_BM_Secondary':
+	case 'IRI_RPG_BM_Heavy':
+	case 'IRI_RPG_CV':
+	case 'IRI_RPG_MG':
+	case 'IRI_RPG_BM':
+		return true;
+	default:
+		return false;
+	}
 }

@@ -13,6 +13,9 @@ var private X2GrenadeTemplate DummyGrenadeTemplate;
 // Russian loc
 // New ability icon
 // AT-4 jank (no blowback, projectile trail disappears as soon as projectile hits)
+// Check logs/redscreens during mod's normal operation.
+// Swap animation names; if ammo remains, use FF_FireA, if no ammo remains, use FF_FireDropLauncher
+// Record a new video, maybe?
 
 struct BackStruct
 {
