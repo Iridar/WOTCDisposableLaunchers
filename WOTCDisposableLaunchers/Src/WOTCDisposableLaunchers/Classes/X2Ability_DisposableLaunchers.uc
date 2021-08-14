@@ -33,7 +33,7 @@ static function X2AbilityTemplate IRI_FireRPG()
 	Template.AbilitySourceName = 'eAbilitySource_Standard';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_HideSpecificErrors;
 	Template.HideErrors.AddItem('AA_CannotAfford_AmmoCost');
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_firerocket";
+	Template.IconImage = "img:///Disposable_Common.Fire_DRL";
 	Template.bUseAmmoAsChargesForHUD = true;
 
 	// Targeting and Triggering
@@ -103,7 +103,7 @@ static function X2AbilityTemplate IRI_PenaltyRPG()
 	Template.AbilitySourceName = 'eAbilitySource_Perk';
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
 	Template.Hostility = eHostility_Neutral;
-	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_heavy_rockets";
+	Template.IconImage = "img:///Disposable_Common.Fire_DRL";
 
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
 
