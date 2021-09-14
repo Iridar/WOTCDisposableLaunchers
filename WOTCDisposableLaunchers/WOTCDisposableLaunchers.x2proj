@@ -36,6 +36,9 @@ tags= war of the chosen, item, weapon</Description>
     <Content Include="Config\Base\XComWOTCDisposableLaunchers_DEFAULT.ini">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Config\Compatibility\XComAutoReload.ini">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Config\Compatibility\XComInfiltration.ini">
       <SubType>Content</SubType>
     </Content>
@@ -75,6 +78,9 @@ tags= war of the chosen, item, weapon</Description>
     <Content Include="Localization\WOTCDisposableLaunchers.int">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Localization\WOTCDisposableLaunchers.rus">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Localization\XComGame.chn">
       <SubType>Content</SubType>
     </Content>
@@ -82,6 +88,9 @@ tags= war of the chosen, item, weapon</Description>
       <SubType>Content</SubType>
     </Content>
     <Content Include="Localization\XComGame.int">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Localization\XComGame.rus">
       <SubType>Content</SubType>
     </Content>
     <Content Include="ModPreview.jpg">
