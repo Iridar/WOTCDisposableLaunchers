@@ -75,54 +75,144 @@ static event OnLoadedSavedGame()
 	}
 }
 
+/*
+var()	editconst	name	SocketName; // Unconst for Issue #281
+var()	editconst	name	BoneName;	// Unconst for Issue #281
+// Start Issue #281
+var()					vector			RelativeLocation;
+var()					rotator			RelativeRotation;
+var()					vector			RelativeScale;
+*/
+
 static function string DLCAppendSockets(XComUnitPawn Pawn)
 {
 	local XComGameState_Unit	UnitState;
 	local BackStruct			UnitBackStruct;
 
-	UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(Pawn.ObjectID));
+	local SkeletalMeshSocket NewSocket;
+	local array<SkeletalMeshSocket> NewSockets;
+	local Attachment			Attach;
 
+	UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(Pawn.ObjectID));
+	
 	if (UnitState != none && UnitState.IsSoldier())
 	{
-		UnitBackStruct = HasGrenadeLauncherOrSwordOnTheBack(UnitState);
+		//UnitBackStruct = HasGrenadeLauncherOrSwordOnTheBack(UnitState);
+
+		foreach Pawn.Mesh.Attachments(Attach)
+		{
+			if (Attach.SocketName == 'GrenadeLauncherSling')
+			{
+				UnitBackStruct.HasGL = true;
+			}
+		}
+
+		foreach Pawn.Mesh.Attachments(Attach)
+		{
+			if (Attach.SocketName == 'SwordSheath')
+			{
+				UnitBackStruct.HasSword = true;
+			}
+		}
 
 		if (UnitBackStruct.HasGL)
 		{
 			if (UnitState.kAppearance.iGender == eGender_Male)
 			{
-				return "Disposable_Common.Meshes.SM_Sockets_GL_M";
+				NewSocket = new class'SkeletalMeshSocket';
+				NewSocket.SocketName = 'AT4_Sling';
+				NewSocket.BoneName = 'GrenadeLauncherSling';
+				NewSocket.RelativeLocation.X = -12.553877f;
+				NewSocket.RelativeLocation.Y = 7.512947f;
+				NewSocket.RelativeLocation.Z = 20.879244f;
+				NewSocket.RelativeRotation.Roll = -15.0f * DegToUnrRot;
+				NewSocket.RelativeRotation.Pitch = 182.0f * DegToUnrRot;
+				NewSocket.RelativeRotation.Yaw = -1.50f * DegToUnrRot;
+				NewSockets.AddItem(NewSocket);
+				Pawn.Mesh.AppendSockets(NewSockets, true);
 			}
 			else
 			{
-				return "Disposable_Common.Meshes.SM_Sockets_GL_F";
+				NewSocket = new class'SkeletalMeshSocket';
+				NewSocket.SocketName = 'AT4_Sling';
+				NewSocket.BoneName = 'GrenadeLauncherSling';
+				NewSocket.RelativeLocation.X = -12.432682f;
+				NewSocket.RelativeLocation.Y = 9.149284f;
+				NewSocket.RelativeLocation.Z = 18.449038f;
+				NewSocket.RelativeRotation.Roll = -15.0f * DegToUnrRot;
+				NewSocket.RelativeRotation.Pitch = 180.0f * DegToUnrRot;
+				NewSocket.RelativeRotation.Yaw = -3.00f * DegToUnrRot;
+				NewSockets.AddItem(NewSocket);
+				Pawn.Mesh.AppendSockets(NewSockets, true);
 			}
 		}
-
-		if (UnitBackStruct.HasSword) 
+		else if (UnitBackStruct.HasSword) 
 		{
 			if (UnitState.kAppearance.iGender == eGender_Male)
 			{
-				return "Disposable_Common.Meshes.SM_Sockets_Sword_M";
+				NewSocket = new class'SkeletalMeshSocket';
+				NewSocket.SocketName = 'AT4_Sling';
+				NewSocket.BoneName = 'SwordSheath';
+				NewSocket.RelativeLocation.X = -10.746689f;
+				NewSocket.RelativeLocation.Y = -5.014373f;
+				NewSocket.RelativeLocation.Z = 8.321416f;
+				NewSocket.RelativeRotation.Roll = 30 * DegToUnrRot;
+				NewSocket.RelativeRotation.Pitch = -116 * DegToUnrRot;
+				//NewSocket.RelativeRotation.Yaw = -3.00f * DegToUnrRot;
+				NewSockets.AddItem(NewSocket);
+				Pawn.Mesh.AppendSockets(NewSockets, true);
 			}
 			else
 			{
-				return "Disposable_Common.Meshes.SM_Sockets_Sword_F";
+				NewSocket = new class'SkeletalMeshSocket';
+				NewSocket.SocketName = 'AT4_Sling';
+				NewSocket.BoneName = 'SwordSheath';
+				NewSocket.RelativeLocation.X = -10.131029f;
+				NewSocket.RelativeLocation.Y = -5.423597f;
+				NewSocket.RelativeLocation.Z = 8.020929f;
+				NewSocket.RelativeRotation.Roll = 30 * DegToUnrRot;
+				NewSocket.RelativeRotation.Pitch = -116 * DegToUnrRot;
+				//NewSocket.RelativeRotation.Yaw = -3.00f * DegToUnrRot;
+				NewSockets.AddItem(NewSocket);
+				Pawn.Mesh.AppendSockets(NewSockets, true);
 			}
 		}
-
-		if (UnitState.kAppearance.iGender == eGender_Male)
+		else 
 		{
-			return "Disposable_Common.Meshes.SM_MaleSockets";
-		}
-		else
-		{
-			return "Disposable_Common.Meshes.SM_FemaleSockets";
+			if (UnitState.kAppearance.iGender == eGender_Male)
+			{
+				NewSocket = new class'SkeletalMeshSocket';
+				NewSocket.SocketName = 'AT4_Sling';
+				NewSocket.BoneName = 'GrenadeLauncherSling';
+				NewSocket.RelativeLocation.X = -14.375536f;
+				NewSocket.RelativeLocation.Y = 5.320904f;
+				NewSocket.RelativeLocation.Z = 4.760049f;
+				NewSocket.RelativeRotation.Roll = 180 * DegToUnrRot;
+				NewSocket.RelativeRotation.Pitch = 180.0f * DegToUnrRot;
+				NewSocket.RelativeRotation.Yaw = -7.50f * DegToUnrRot;
+				NewSockets.AddItem(NewSocket);
+				Pawn.Mesh.AppendSockets(NewSockets, true);
+			}
+			else
+			{
+				NewSocket = new class'SkeletalMeshSocket';
+				NewSocket.SocketName = 'AT4_Sling';
+				NewSocket.BoneName = 'GrenadeLauncherSling';
+				NewSocket.RelativeLocation.X = -13.947793f;
+				NewSocket.RelativeLocation.Y = 8.563524f;
+				NewSocket.RelativeLocation.Z = 4.760049f;
+				NewSocket.RelativeRotation.Roll = 180 * DegToUnrRot;
+				NewSocket.RelativeRotation.Pitch = 180.0f * DegToUnrRot;
+				NewSocket.RelativeRotation.Yaw = -7.50f * DegToUnrRot;
+				NewSockets.AddItem(NewSocket);
+				Pawn.Mesh.AppendSockets(NewSockets, true);
+			}
 		}
 	}
 	return "";
 }
 
-static function BackStruct HasGrenadeLauncherOrSwordOnTheBack(XComGameState_Unit UnitState)
+static private function BackStruct HasGrenadeLauncherOrSwordOnTheBack(XComGameState_Unit UnitState)
 {
 	local array<XComGameState_Item> InventoryItems;
 	local X2GrenadeLauncherTemplate GLTemplate;
@@ -172,23 +262,23 @@ static function BackStruct HasGrenadeLauncherOrSwordOnTheBack(XComGameState_Unit
 	return ReturnStruct;
 }
 
-static function bool HasPrimaryMeleeEquipped(XComGameState_Unit UnitState, optional XComGameState CheckGameState)
+static private function bool HasPrimaryMeleeEquipped(XComGameState_Unit UnitState, optional XComGameState CheckGameState)
 {
 	return IsPrimaryMeleeWeaponTemplate(X2WeaponTemplate(UnitState.GetItemInSlot(eInvSlot_PrimaryWeapon, CheckGameState).GetMyTemplate()));
 }
 
-static function bool HasSecondaryMeleeEquipped(XComGameState_Unit UnitState, optional XComGameState CheckGameState)
+static private function bool HasSecondaryMeleeEquipped(XComGameState_Unit UnitState, optional XComGameState CheckGameState)
 {
 	return IsSecondaryMeleeWeaponTemplate(X2WeaponTemplate(UnitState.GetItemInSlot(eInvSlot_SecondaryWeapon, CheckGameState).GetMyTemplate()));
 }
 
-static function bool HasDualMeleeEquipped(XComGameState_Unit UnitState, optional XComGameState CheckGameState)
+static private function bool HasDualMeleeEquipped(XComGameState_Unit UnitState, optional XComGameState CheckGameState)
 {
 	return IsPrimaryMeleeWeaponTemplate(X2WeaponTemplate(UnitState.GetItemInSlot(eInvSlot_PrimaryWeapon, CheckGameState).GetMyTemplate())) &&
 		IsSecondaryMeleeWeaponTemplate(X2WeaponTemplate(UnitState.GetItemInSlot(eInvSlot_SecondaryWeapon, CheckGameState).GetMyTemplate()));
 }
 
-static function bool IsPrimaryMeleeWeaponTemplate(X2WeaponTemplate WeaponTemplate)
+static private function bool IsPrimaryMeleeWeaponTemplate(X2WeaponTemplate WeaponTemplate)
 {
 	return WeaponTemplate != none &&
 		WeaponTemplate.InventorySlot == eInvSlot_PrimaryWeapon &&
@@ -199,7 +289,7 @@ static function bool IsPrimaryMeleeWeaponTemplate(X2WeaponTemplate WeaponTemplat
 		WeaponTemplate.WeaponCat != 'gauntlet';
 }
 
-static function bool IsSecondaryMeleeWeaponTemplate(X2WeaponTemplate WeaponTemplate)
+static private function bool IsSecondaryMeleeWeaponTemplate(X2WeaponTemplate WeaponTemplate)
 {
 	return WeaponTemplate != none &&
 		WeaponTemplate.InventorySlot == eInvSlot_SecondaryWeapon &&
@@ -210,7 +300,7 @@ static function bool IsSecondaryMeleeWeaponTemplate(X2WeaponTemplate WeaponTempl
 		WeaponTemplate.WeaponCat != 'gauntlet';
 }
 
-static function bool IsMeleeWeaponTemplate(X2WeaponTemplate WeaponTemplate)
+static private function bool IsMeleeWeaponTemplate(X2WeaponTemplate WeaponTemplate)
 {
 	return WeaponTemplate != none &&
 		WeaponTemplate.iRange == 0 &&
@@ -295,7 +385,7 @@ static event OnPostTemplatesCreated()
 		CHHelpersObj.AddShouldDisplayMultiSlotItemInTacticalCallback(ShouldDisplayDRL_Tactical);
 	}
 }
-static function EHLDelegateReturn ShouldDisplayDRL_Strategy(XComGameState_Unit UnitState, XComGameState_Item ItemState, out int bDisplayItem, XComUnitPawn UnitPawn, optional XComGameState CheckGameState)
+static final function EHLDelegateReturn ShouldDisplayDRL_Strategy(XComGameState_Unit UnitState, XComGameState_Item ItemState, out int bDisplayItem, XComUnitPawn UnitPawn, optional XComGameState CheckGameState)
 {
 	if (ItemState.GetWeaponCategory() == 'iri_disposable_launcher' && !HasWeaponOfCategoryInSlotOtherThan(UnitState, 'iri_disposable_launcher', ItemState.InventorySlot, CheckGameState))
 	{
@@ -303,7 +393,7 @@ static function EHLDelegateReturn ShouldDisplayDRL_Strategy(XComGameState_Unit U
 	}
 	return EHLDR_NoInterrupt;
 }
-static function EHLDelegateReturn ShouldDisplayDRL_Tactical(XComGameState_Unit UnitState, XComGameState_Item ItemState, out int bDisplayItem, XGUnit UnitVisualizer, optional XComGameState CheckGameState)
+static final function EHLDelegateReturn ShouldDisplayDRL_Tactical(XComGameState_Unit UnitState, XComGameState_Item ItemState, out int bDisplayItem, XGUnit UnitVisualizer, optional XComGameState CheckGameState)
 {
 	if (ItemState.GetWeaponCategory() == 'iri_disposable_launcher' && !ItemState.bMergedOut)
 	{

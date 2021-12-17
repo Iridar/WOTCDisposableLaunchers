@@ -1,0 +1,8 @@
+{
+    "sfStandalone": [
+        "IRI_DRL_CV",
+		"IRI_DRL_MG",
+		"IRI_DRL_BM",
+		"IRI_DRL_UI"		
+    ]
+}

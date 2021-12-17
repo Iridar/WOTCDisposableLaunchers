@@ -57,16 +57,19 @@ tags= war of the chosen, item, weapon</Description>
     <Content Include="Config\XComTemplateEditor.ini">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Content\AT4_Assets.upk">
+    <Content Include="ContentForCook\IRI_DRL_BM.upk">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Content\Disposable_BM.upk">
+    <Content Include="ContentForCook\IRI_DRL_Common.upk">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Content\Disposable_Common.upk">
+    <Content Include="ContentForCook\IRI_DRL_CV.upk">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Content\Disposable_MG.upk">
+    <Content Include="ContentForCook\IRI_DRL_MG.upk">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="ContentForCook\IRI_DRL_UI.upk">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Localization\WOTCDisposableLaunchers.chn">
@@ -180,8 +183,8 @@ tags= war of the chosen, item, weapon</Description>
     <Folder Include="Config" />
     <Folder Include="Config\Base" />
     <Folder Include="Config\Compatibility" />
-    <Folder Include="Content" />
     <Folder Include="Localization" />
+    <Folder Include="ContentForCook" />
     <Folder Include="Src" />
     <Folder Include="Src\ModConfigMenuAPI" />
     <Folder Include="Src\ModConfigMenuAPI\Classes" />
