@@ -75,15 +75,6 @@ static event OnLoadedSavedGame()
 	}
 }
 
-/*
-var()	editconst	name	SocketName; // Unconst for Issue #281
-var()	editconst	name	BoneName;	// Unconst for Issue #281
-// Start Issue #281
-var()					vector			RelativeLocation;
-var()					rotator			RelativeRotation;
-var()					vector			RelativeScale;
-*/
-
 static function string DLCAppendSockets(XComUnitPawn Pawn)
 {
 	local XComGameState_Unit	UnitState;
@@ -91,29 +82,14 @@ static function string DLCAppendSockets(XComUnitPawn Pawn)
 
 	local SkeletalMeshSocket NewSocket;
 	local array<SkeletalMeshSocket> NewSockets;
-	local Attachment			Attach;
+
+	local SkeletalMeshComponent		SkelMesh;
 
 	UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(Pawn.ObjectID));
 	
 	if (UnitState != none && UnitState.IsSoldier())
 	{
-		//UnitBackStruct = HasGrenadeLauncherOrSwordOnTheBack(UnitState);
-
-		foreach Pawn.Mesh.Attachments(Attach)
-		{
-			if (Attach.SocketName == 'GrenadeLauncherSling')
-			{
-				UnitBackStruct.HasGL = true;
-			}
-		}
-
-		foreach Pawn.Mesh.Attachments(Attach)
-		{
-			if (Attach.SocketName == 'SwordSheath')
-			{
-				UnitBackStruct.HasSword = true;
-			}
-		}
+		UnitBackStruct = HasGrenadeLauncherOrSwordOnTheBack(UnitState);
 
 		if (UnitBackStruct.HasGL)
 		{
@@ -158,7 +134,7 @@ static function string DLCAppendSockets(XComUnitPawn Pawn)
 				NewSocket.RelativeLocation.Z = 8.321416f;
 				NewSocket.RelativeRotation.Roll = 30 * DegToUnrRot;
 				NewSocket.RelativeRotation.Pitch = -116 * DegToUnrRot;
-				//NewSocket.RelativeRotation.Yaw = -3.00f * DegToUnrRot;
+				//NewSocket.RelativeRotation.Yaw = 0 * DegToUnrRot;
 				NewSockets.AddItem(NewSocket);
 				Pawn.Mesh.AppendSockets(NewSockets, true);
 			}
@@ -172,7 +148,7 @@ static function string DLCAppendSockets(XComUnitPawn Pawn)
 				NewSocket.RelativeLocation.Z = 8.020929f;
 				NewSocket.RelativeRotation.Roll = 30 * DegToUnrRot;
 				NewSocket.RelativeRotation.Pitch = -116 * DegToUnrRot;
-				//NewSocket.RelativeRotation.Yaw = -3.00f * DegToUnrRot;
+				//NewSocket.RelativeRotation.Yaw = 0 * DegToUnrRot;
 				NewSockets.AddItem(NewSocket);
 				Pawn.Mesh.AppendSockets(NewSockets, true);
 			}

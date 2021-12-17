@@ -185,6 +185,7 @@ tags= war of the chosen, item, weapon</Description>
     <Folder Include="Config\Compatibility" />
     <Folder Include="Localization" />
     <Folder Include="ContentForCook" />
+    <Folder Include="Content" />
     <Folder Include="Src" />
     <Folder Include="Src\ModConfigMenuAPI" />
     <Folder Include="Src\ModConfigMenuAPI\Classes" />
