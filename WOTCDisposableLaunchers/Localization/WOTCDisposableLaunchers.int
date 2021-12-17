@@ -36,13 +36,13 @@ GroupHeader="General Settings"
 GroupHeader2="Allowed Inventory Slots"
 
 DRL_STAT_PENALTIES_ENABLED_Label = "Enable DRL Stat Penalties"
-DRL_STAT_PENALTIES_ENABLED_Tips = "If enabled, carrying Disposable Rocket Launchers will apply stat penalties to soldiers. By default, the stat penalties are applied only for carrying a DRL in a Utility Slot. Penalties can be reconfigured in this mod's configuration files."
+DRL_STAT_PENALTIES_ENABLED_Tip = "If enabled, carrying Disposable Rocket Launchers will apply stat penalties to soldiers. By default, the stat penalties are applied only for carrying a DRL in a Utility Slot. Penalties can be reconfigured in this mod's configuration files."
 
 DRL_STAT_PENALTIES_APPLIED_TO_HEAVY_ARMOR_Label = "DRL Stat Penalties apply to Heavy Armor"
-DRL_STAT_PENALTIES_APPLIED_TO_HEAVY_ARMOR_Tips = "If enabled, stat penalties for carrying Disposable Rocket Launchers will apply even if the soldier wears Heavy Armor, like E.X.O. or W.A.R. Suit."
+DRL_STAT_PENALTIES_APPLIED_TO_HEAVY_ARMOR_Tip = "If enabled, stat penalties for carrying Disposable Rocket Launchers will apply even if the soldier wears Heavy Armor, like E.X.O. or W.A.R. Suit."
 
 UTILITY_DRL_OCCUPIES_TWO_SLOTS_Label = "Utility Slot DRL Occupies two slots"
-UTILITY_DRL_OCCUPIES_TWO_SLOTS_Tips = "If enabled, equipping a DRL into a Utility Slot will remove one Utility Slot from the soldier, and the soldier will be able to equip a DRL into a Utility Slot only if they have at least two Utility Slots available."
+UTILITY_DRL_OCCUPIES_TWO_SLOTS_Tip = "If enabled, equipping a DRL into a Utility Slot will remove one Utility Slot from the soldier, and the soldier will be able to equip a DRL into a Utility Slot only if they have at least two Utility Slots available."
 
 UTILITY_DRL_MUTUALLY_EXCLUSIVE_WITH_GRENADES_Label = "Utility Slot DRL mutually exclusive with Grenades"
-UTILITY_DRL_MUTUALLY_EXCLUSIVE_WITH_GRENADES_Tips = "If enabled, soldiers will be unable to equip a DRL into a Utility Slot while having an offensive grenade in another Utility Slot, and vice versa."
+UTILITY_DRL_MUTUALLY_EXCLUSIVE_WITH_GRENADES_Tip = "If enabled, soldiers will be unable to equip a DRL into a Utility Slot while having an offensive grenade in another Utility Slot, and vice versa."
