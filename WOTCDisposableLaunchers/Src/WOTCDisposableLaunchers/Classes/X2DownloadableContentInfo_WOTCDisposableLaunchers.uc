@@ -60,7 +60,7 @@ static event OnLoadedSavedGame()
 		if (ItemTemplate.StartingItem || XComHQ.HasItemByName(ItemTemplate.CreatorTemplateName) || XComHQ.IsTechResearched(ItemTemplate.CreatorTemplateName))
 		{	
 			ItemState = ItemTemplate.CreateInstanceFromTemplate(NewGameState);
-			XComHQ.PutItemInInventory(NewGameState, ItemState);
+			XComHQ.AddItemToHQInventory(ItemState);	
 		}
 	}
 
@@ -82,8 +82,6 @@ static function string DLCAppendSockets(XComUnitPawn Pawn)
 
 	local SkeletalMeshSocket NewSocket;
 	local array<SkeletalMeshSocket> NewSockets;
-
-	local SkeletalMeshComponent		SkelMesh;
 
 	UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(Pawn.ObjectID));
 	

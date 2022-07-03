@@ -15,8 +15,8 @@ FriendlyName="CRAG"
 FriendlyNamePlural="CRAGs"
 ThrownAbilityName="Fire CRAG"
 ThrownAbilityHelpText="Fire the CRAG."
-BriefSummary="CRAG uses overclocked magnetic coils to rapidly accelerate a modified Alien Grenade, launching it at supersonic speeds. Unfortunately, without a heavy and bulky compensation and cooling unit, the coil lining invariably fries during the shot, making this launcher unfit for reuse."
-TacticalText="CRAG uses overclocked magnetic coils to rapidly accelerate a modified Alien Grenade, launching it at supersonic speeds. Unfortunately, without a heavy and bulky compensation and cooling unit, the coil lining invariably fries during the shot, making this launcher unfit for reuse."
+BriefSummary="Coil and Rocket Accelerated Grenade uses overclocked magnetic coils to rapidly accelerate a modified Alien Grenade, launching it at supersonic speeds. Unfortunately, without a heavy and bulky compensation and cooling unit, the coil lining invariably fries during the shot, making this launcher unfit for reuse."
+TacticalText="Coil and Rocket Accelerated Grenade uses overclocked magnetic coils to rapidly accelerate a modified Alien Grenade, launching it at supersonic speeds. Unfortunately, without a heavy and bulky compensation and cooling unit, the coil lining invariably fries during the shot, making this launcher unfit for reuse."
 
 [IRI_DRL_BM X2DisposableLauncherTemplate]
 FriendlyName="BFG"
@@ -31,7 +31,7 @@ strDetectionModifier = "DETECTION RADIUS INCREASE"
 
 [DRL_MCM_Screen]
 ModName="Disposable Launchers"
-PageTitle="Disposable Rocket Launchers 3.0"
+PageTitle="Disposable Rocket Launchers 3.1"
 GroupHeader="General Settings"
 GroupHeader2="Allowed Inventory Slots"
 
