@@ -3,9 +3,9 @@
 More info here: https://patreon.com/Iridar/
 
 
-[WOTC] Disposable Rocket Launchers 3.1
+[WOTC] Disposable Rocket Launchers 4.0
 
-Adds three tiers of single-shot [b]Disposable Rocket Launchers (DRLs)[/b]. They are a heavier alternative to standard explosive grenades - DRLs deal a lot more damage and can be used at longer ranges. 
+Adds three tiers of single-shot [b]Disposable Rocket Launchers (DRLs)[/b]. They are a heavier alternative to standard explosive grenades - DRLs deal a lot more damage and can be used at longer ranges, but take two actions to fire.
 
 The mod also adds a few photobooth poses with DRLs.
 
@@ -31,7 +31,7 @@ Safe to add mid-campaign.
 [h1]COMPANION MODS[/h1]
 [list][*][b][url=https://steamcommunity.com/sharedfiles/filedetails/?id=667104300][WotC] Mod Config Menu[/url][/b] - some aspects of this mod are configurable through MCM.
 [*][b][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2067720616]Improved Rocket Targeting[/url][/b] - highly recommended. Makes rocket targeting more reasonable.
-[*][b][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2025780967][WOTC] Iridar's Scatter Mod[/url][/b] - if this mod is present, DRLs will have scatter mechanics, making them more balanced relative to grenades.
+[*][b][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2025780967][WOTC] Iridar's Scatter Mod[/url][/b] - DLR mod has commented out config for the Scatter Mod.
 [*][b][url=https://steamcommunity.com/sharedfiles/filedetails/?id=1181681128]Beam Grenade Launcher[/url][/b] - if this mod is present, Beam-tier DRLs will become available after you purchase the Beam Grenade Launcher schematic, which becomes available much later in the campaign than [b]Advanced Explosives[/b] Proving Grounds project. This will make DRLs more balanced.
 [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=1533060800][b][WOTC] Open Class Weapon Restrictions[/b][/url] - if this mod is present, all mod-added soldier classes that use a Grenade Launcher secondary weapon will be able to carry a DRL as a secondary weapon.
 [/list]
@@ -49,6 +49,7 @@ Mod's configuration files are located at:
 There you can do things like:[list]
 [*] Allow only one DRL per soldier (XComGameData.ini)
 [*] Fine-tune stat penalties for carrying DRLs in any specific slot (XComDisposableLaunchers.ini)
+[*] Restore scatter config for the Scatter Mod (Compatibility\XComScatter.ini)
 [*] Edit DRLs' stats to your heart's content (XComTemplateEditor.ini)[/list]
 
 [h1]COMPATIBILITY[/h1]
@@ -58,12 +59,6 @@ Compatible with [b][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2
 If [b]Prototype Armory[/b] is present, DRLs will automatically switch to being single-buildable. Mag-tier DRL production will be unlocked by [b]Muton Autopsy[/b], and beam-tier by [b]Plasma Cannon[/b] research.
 
 Compatible with [b][url=https://steamcommunity.com/workshop/filedetails/?id=2683996590]Long War of the Chosen[/url][/b] via [b][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2684079953]Mod Jam[/url][/b].
-
-[h1]What happened to the old version?[/h1]
-
-The 3.0 update requires [b][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2363075446][WOTC] Iridar's Template Master - Core[/url][/b], and uploading the update to the old version of the mod would have broken campaigns of people who don't have it active.
-
-If you do have [b]Template Master - Core[/b] active, you are safe to switch to the current version of the mod even mid-campaign.
 
 [h1]COOKED ASSETS[/h1]
 
@@ -85,9 +80,9 @@ Please support me on [b][url=https://www.patreon.com/Iridar]Patreon[/url][/b] if
 
 
 
-[WOTC] Disposable Rocket Launchers 3.1
+[WOTC] Disposable Rocket Launchers 4.0
 
-Этот мод добавляет три уровня одноразовых гранатометов (далее "РПГ"). Они представляют собой более тяжелую альтернативу обычным гранатам - РПГ наносят больше урона и могут быть использованы с большего расстояния.
+Этот мод добавляет три уровня одноразовых гранатометов (далее "РПГ"). Они представляют собой более тяжелую альтернативу обычным гранатам - РПГ наносят больше урона и могут быть использованы с большего расстояния, но требуют два очка действия на выстрел.
 
 Также этот мод добавляет несколько поз с РПГ в фотокабинку.
 
@@ -113,7 +108,7 @@ Please support me on [b][url=https://www.patreon.com/Iridar]Patreon[/url][/b] if
 [h1]МОДЫ-КОМПАНЬОНЫ[/h1]
 [list][*][b][url=https://steamcommunity.com/sharedfiles/filedetails/?id=667104300][WotC] Mod Config Menu[/url][/b] - некоторые аспекты этого мода можно настроить в меня конфигурации модов.
 [*][b][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2067720616]Improved Rocket Targeting[/url][/b] - настоятельно рекомендуется. Существенно облегчает прицеливание ракетами.
-[*][b][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2025780967][WOTC] Iridar's Scatter Mod[/url][/b] - при наличии этого мода, РПГ будут подвержены механикам разброса, делая их более сбалансированными относительно гранат.
+[*][b][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2025780967][WOTC] Iridar's Scatter Mod[/url][/b] - этот мод содержит закомментированный конфиг для Scatter Mod'а.
 [*][b][url=https://steamcommunity.com/sharedfiles/filedetails/?id=1181681128]Beam Grenade Launcher[/url][/b] - при наличии этого мода, РПГ лучевого уровня будут улучшаться покупкой апгрейда Лучевого Гранатомета. Это делает этот мод более сбалансированным, оттягивая время получения лучевых РПГ.
 [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=1533060800][b][WOTC] Open Class Weapon Restrictions[/b][/url] - при наличии этого мода, все классы бойцов, которые могут использовать гранатомет Гренадёра как дополнительное оружие, смогут использовать в этом же слоте и РПГ.
 [/list]
