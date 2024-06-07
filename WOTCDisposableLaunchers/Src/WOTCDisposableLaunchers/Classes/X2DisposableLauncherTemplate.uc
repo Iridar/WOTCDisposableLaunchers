@@ -78,3 +78,8 @@ function int GetUIStatMarkup(ECharStatType Stat, optional XComGameState_Item Wea
 	}
 	return Markup;
 }
+
+defaultproperties
+{
+	bHideWithNoAmmo = true
+}

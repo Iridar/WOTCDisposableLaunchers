@@ -7,31 +7,31 @@ FriendlyName="RPG"
 FriendlyNamePlural="RPGs"
 ThrownAbilityName="Fire RPG"
 ThrownAbilityHelpText="Fire the RPG."
-BriefSummary="We managed to secure a large supply of these single use RPGs from one of the munitions depots leftover from the original XCOM project. They are highly effective against armored targets and groups of enemies, but can be unwieldy to use."
-TacticalText="We managed to secure a large supply of these single use RPGs from one of the munitions depots leftover from the original XCOM project. They are highly effective against armored targets and groups of enemies, but can be unwieldy to use."
+BriefSummary="We managed to secure a large supply of these single use RPGs from one of the munitions depots left over from the original XCOM project. They are highly effective against armored targets and groups of enemies, but can be unwieldy to use."
+TacticalText="We managed to secure a large supply of these single use RPGs from one of the munitions depots left over from the original XCOM project. They are highly effective against armored targets and groups of enemies, but can be unwieldy to use.<br/><bullet/> Firing the RPG requires two action points."
 
 [IRI_DRL_MG X2DisposableLauncherTemplate]
 FriendlyName="CRAG"
 FriendlyNamePlural="CRAGs"
 ThrownAbilityName="Fire CRAG"
 ThrownAbilityHelpText="Fire the CRAG."
-BriefSummary="Coil and Rocket Accelerated Grenade uses overclocked magnetic coils to rapidly accelerate a modified Alien Grenade, launching it at supersonic speeds. Unfortunately, without a heavy and bulky compensation and cooling unit, the coil lining invariably fries during the shot, making this launcher unfit for reuse."
-TacticalText="Coil and Rocket Accelerated Grenade uses overclocked magnetic coils to rapidly accelerate a modified Alien Grenade, launching it at supersonic speeds. Unfortunately, without a heavy and bulky compensation and cooling unit, the coil lining invariably fries during the shot, making this launcher unfit for reuse."
+BriefSummary="Coil and Rocket Accelerated Grenade uses overclocked magnetic coils to rapidly accelerate a modified Alien Grenade, launching it at supersonic speeds. Unfortunately, without a heavy and bulky compensation and cooling unit, the coil lining fries during the shot, making this launcher unfit for reuse."
+TacticalText="Coil and Rocket Accelerated Grenade uses overclocked magnetic coils to rapidly accelerate a modified Alien Grenade, launching it at supersonic speeds. Unfortunately, without a heavy and bulky compensation and cooling unit, the coil lining fries during the shot, making this launcher unfit for reuse.<br/><bullet/> Firing the CRAG requires two action points."
 
 [IRI_DRL_BM X2DisposableLauncherTemplate]
 FriendlyName="BFG"
 FriendlyNamePlural="BFGs"
 ThrownAbilityName="Fire BFG"
 ThrownAbilityHelpText="Fire the BFG."
-BriefSummary="Binary Fusion Grenade uses a conventional explosive charge to implode an Elerium Core, giving it a significant potential as an explosive. BFG uses condensed atmosphere air to supercool the Core to delay the chain reaction. The core is then immediately launched via no-contact magnetic fields."
-TacticalText="Binary Fusion Grenade uses a conventional explosive charge to implode an Elerium Core, giving it a significant potential as an explosive. BFG uses condensed atmosphere air to supercool the Core to delay the chain reaction. The core is then immediately launched via no-contact magnetic fields."
+BriefSummary="Binary Fusion Grenade uses a conventional explosive charge to implode an Elerium Core, giving it significant explosive potency. BFG uses condensed atmosphere air to supercool the Core to delay the chain reaction. The core is then immediately launched via no-contact magnetic fields."
+TacticalText="Binary Fusion Grenade uses a conventional explosive charge to implode an Elerium Core, giving it significant explosive potency. BFG uses condensed atmosphere air to supercool the Core to delay the chain reaction. The core is then immediately launched via no-contact magnetic fields.<br/><bullet/> Firing the BFG requires two action points."
 
 [XComGameState_Item_DRL]
 strDetectionModifier = "DETECTION RADIUS INCREASE"
 
 [DRL_MCM_Screen]
 ModName="Disposable Launchers"
-PageTitle="Disposable Rocket Launchers 3.1"
+PageTitle="Disposable Rocket Launchers 4.0"
 GroupHeader="General Settings"
 GroupHeader2="Allowed Inventory Slots"
 

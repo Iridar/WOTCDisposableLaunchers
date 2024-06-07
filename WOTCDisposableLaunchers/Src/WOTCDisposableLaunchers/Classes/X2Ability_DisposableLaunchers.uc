@@ -31,8 +31,11 @@ static function X2AbilityTemplate IRI_FireRPG()
 
 	// Icon setup
 	Template.AbilitySourceName = 'eAbilitySource_Standard';
-	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_HideSpecificErrors;
-	Template.HideErrors.AddItem('AA_CannotAfford_AmmoCost');
+	Template.bDisplayInUITacticalText = false;
+
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
+	Template.OverrideAbilityAvailabilityFn = DRL_OverrideAbilityAvailability;
+
 	Template.IconImage = "img:///IRI_DRL_UI.UIPerk_Fire_DRL";
 	Template.bUseAmmoAsChargesForHUD = true;
 
@@ -90,6 +93,19 @@ static function X2AbilityTemplate IRI_FireRPG()
 	Template.LostSpawnIncreasePerUse = class'X2AbilityTemplateManager'.default.HeavyWeaponLostSpawnIncreasePerUse;
 
 	return Template;	
+}
+
+// Hide if no more ammo.
+static private function DRL_OverrideAbilityAvailability(out AvailableAction Action, XComGameState_Ability AbilityState, XComGameState_Unit OwnerState)
+{
+	local XComGameState_Item SourceWeapon;
+
+	SourceWeapon = AbilityState.GetSourceWeapon();
+
+    if (SourceWeapon == none || SourceWeapon.Ammo <= 0)
+	{
+		Action.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+	}
 }
 
 static function X2AbilityTemplate IRI_PenaltyRPG()
