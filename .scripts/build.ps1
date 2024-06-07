@@ -12,6 +12,7 @@ Write-Host "Sourcing $common"
 
 $builder = [BuildProject]::new("WOTCDisposableLaunchers", $srcDirectory, $sdkPath, $gamePath)
 $builder.IncludeSrc("C:\Users\Iridar\Documents\Firaxis ModBuddy\X2WOTCCommunityHighlander\X2WOTCCommunityHighlander\Src")
+$builder.IncludeSrc("C:\Users\Iridar\Documents\Firaxis ModBuddy\CustomSrc")
 
 switch ($config)
 {
