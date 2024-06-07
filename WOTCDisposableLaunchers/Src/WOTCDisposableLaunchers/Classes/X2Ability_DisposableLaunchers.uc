@@ -85,8 +85,10 @@ static function X2AbilityTemplate IRI_FireRPG()
 	Template.CinescriptCameraType = "Iridar_DisposableLauncher";
 	Template.ActionFireClass = class'X2Action_FireDisposableLauncher';
 
+	Template.Hostility = eHostility_Offensive;
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+	Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
 
 	Template.SuperConcealmentLoss = class'X2AbilityTemplateManager'.default.SuperConcealmentStandardShotLoss;
 	Template.ChosenActivationIncreasePerUse = class'X2AbilityTemplateManager'.default.StandardShotChosenActivationIncreasePerUse;
