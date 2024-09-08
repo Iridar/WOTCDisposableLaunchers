@@ -148,4 +148,4 @@ Please support me on [b][url=https://www.patreon.com/Iridar]Patreon[/url][/b] if
 Спасибо Beaglerush за его консультации по балансу мода и за демонстрацию этого мода во время своих стримов по XCOM 2, которые [b][url=https://www.twitch.tv/beagsandjam]можно посмотреть здесь[/url][/b].
 Русский перевод: УФОшник, XCOMrades и я.
 
-Поддержать автора можно через [b][url=https://sponsr.ru/iridar/]Sponsr[/url][/b]. Становитесь подписчиком - и будем создавать крутые моды вместе.
+Поддержать автора можно через [b][url=https://www.patreon.com/Iridar]Patreon[/url][/b]. Становитесь подписчиком - и будем создавать крутые моды вместе.
